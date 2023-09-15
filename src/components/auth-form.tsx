@@ -6,19 +6,34 @@ import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Alert } from "@/components/ui/alert";
+import { sendEmail } from "@/lib/email";
+import { EmailTemplate } from '@/lib/constants';
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
+async function sendEmailToUser(to: string) {
+  return await sendEmail({
+    to, 
+    template: EmailTemplate.AccountConfirmation,
+    args: {
+      confirmationLink: `${process.env.NEXT_PUBLIC_APP_URL}/confirm-account`
+    }
+  });
+}
+
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [result, setResult] = React.useState<any>(null);
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
 
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
+    let result = sendEmailToUser((event.target as any).email.value);
+    setIsLoading(false);
+
+    setResult(result);
   }
 
   return (
@@ -45,6 +60,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             )}
             Sign In with Email
           </Button>
+          {result && (
+            <Alert className="mt-4" variant="destructive">
+              {result}
+            </Alert>
+          )}
         </div>
       </form>
     </div>

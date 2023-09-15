@@ -5,6 +5,7 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { UserAuthForm } from "@/components/auth-form"
 import { Icons } from "@/components/icons"
+import { sendEmail } from "@/lib/email";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 }
 
 export default function AuthenticationPage() {
-    return (
+  return (
     <>
         <div className="container relative hidden h-full flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Link

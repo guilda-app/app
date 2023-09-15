@@ -88,4 +88,5 @@ model Channel {
   updatedAt DateTime @updatedAt
 
   @@index([serverId])
+  @@index([profileId])
 }
