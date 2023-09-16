@@ -10,19 +10,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  profile   Profile?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Profile {
   id        String   @id @default(uuid())
   userId    String   @unique
   name      String
   imageUri  String  
-  email     String  
 
   servers   Server[]
   members   Member[]
   channels  Channel[]
 
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model Invite {
@@ -89,4 +101,10 @@ model Channel {
 
   @@index([serverId])
   @@index([profileId])
+}
+
+model verificationCode {
+  id        String   @id @default(uuid()) @unique
+  email     String
+  createdAt DateTime @default(now())
 }

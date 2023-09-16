@@ -3,17 +3,14 @@
 import { SMTPClient } from 'emailjs';
 import WelcomeEmail from '@/emails/welcome';
 import { EmailTemplate } from '@/lib/constants';
+import { Resend } from 'resend';
+
 
 declare global {
     var emailClient: SMTPClient | undefined
 }
 
-const emailClient = globalThis.emailClient || new SMTPClient({
-    user: process.env.EMAIL_USER,
-	password: process.env.EMAIL_PASSWORD,
-	host: process.env.EMAIL_HOST,
-	ssl: true,
-})
+const emailClient = globalThis.emailClient || new Resend(process.env.RESEND_KEY as string)
 
 if (process.env.NODE_ENV === 'development') {
     globalThis.emailClient = emailClient
@@ -30,11 +27,11 @@ export async function sendEmail({
 }) {
     switch (template) {
         case EmailTemplate.AccountConfirmation:
-            return await emailClient.sendAsync({
-                from: process.env.EMAIL_USER as string,
+            return emailClient.emails.send({
+                from: process.env.EMAiL_FROM as string,
                 to,
                 subject: 'Welcome to guilda!',
-                text: WelcomeEmail(to, args),
+                html: WelcomeEmail(to, args),
             });
     }
 }
