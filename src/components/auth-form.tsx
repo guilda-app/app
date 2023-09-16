@@ -28,9 +28,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import ConfettiExplosion from 'react-confetti-explosion';
-import useUser from "@/lib/useUser";
 import { configDotenv } from "dotenv";
-import { useRouter } from "next/router";
 
 configDotenv();
 
@@ -54,9 +52,6 @@ async function sendEmailToUser(to: string, isSignUp: boolean = true) {
 }
 
 export function UserAuthForm({ className, isSignUp, ...props }: UserAuthFormProps) {
-  //const router = useRouter();
-  //useUser(() => router.push("/app"));
-
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [result, setResult] = React.useState("");
   const [responseStatusCode, setStatusCode] = React.useState<number>(0);

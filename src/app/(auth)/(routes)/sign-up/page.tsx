@@ -10,7 +10,7 @@ import useUser from "@/lib/useUser";
 export default function AuthenticationPage() {  
   const router = useRouter();
   try {
-    useUser(() => router.push("/app"));
+    useUser(() => router.push("/app"), true);
   } catch(e) { /* noop */}
   
   return (

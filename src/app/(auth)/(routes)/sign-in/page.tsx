@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation"
 
 export default async function AuthenticationPage() {
   const router = useRouter();
-  useUser(() => router.push("/app"));
+  useUser(() => router.push("/app"), true);
 
   return (
     <>

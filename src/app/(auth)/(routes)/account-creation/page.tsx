@@ -17,7 +17,7 @@ export default function AuthenticationPage() {
   const router = useRouter();
   let query = useSearchParams();
 
-  useUser(() => router.push("/app"));
+  useUser(() => router.push("/app"), true);
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [email, setEmail] = React.useState("");
