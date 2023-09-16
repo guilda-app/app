@@ -1,4 +1,4 @@
-import { Metadata } from "next"
+"use client";
 import Image from "next/image"
 import Link from "next/link"
 
@@ -6,17 +6,12 @@ import { cn } from "@/lib/utils"
 import { UserAuthForm } from "@/components/auth-form"
 import { Icons } from "@/components/icons"
 import useUser from "@/lib/useUser"
+import { useRouter } from "next/navigation"
 
-export const metadata: Metadata = {
-  title: "Authentication",
-  description: "Authentication forms built using the components.",
-}
 
-export default function AuthenticationPage() {
-  useUser({
-    redirectTo: '/app',
-    redirectIfFound: true,
-  })
+export default async function AuthenticationPage() {
+  const router = useRouter();
+  useUser(() => router.push("/app"));
 
   return (
     <>

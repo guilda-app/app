@@ -8,22 +8,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React from "react";
 import { createProfile, getActivationFromSlug } from "@/lib/profiles";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { session } from "@/lib/session";
 import useUser from "@/lib/useUser";
-import fetchJson from "@/lib/fetchJSON";
 
 export default function AuthenticationPage() {
-  useUser({
-    redirectTo: '/app',
-    redirectIfFound: true,
-  })
+  const router = useRouter();
+  let query = useSearchParams();
+
+  useUser(() => router.push("/app"));
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [email, setEmail] = React.useState("");
 
-  let query = useSearchParams();
   let verificationId = query.get("id") as string;
-  const router = useRouter();
 
   React.useEffect(() => {
     if (verificationId) {
@@ -45,13 +44,7 @@ export default function AuthenticationPage() {
       activationId: verificationId,
     });
 
-    await fetchJson('/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id: profile.userId,
-      }),
-    })
+    //await session.set("id", profile.userId)
 
     if (typeof window !== 'undefined') {
       window.location.reload();

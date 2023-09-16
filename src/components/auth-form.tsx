@@ -29,6 +29,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import ConfettiExplosion from 'react-confetti-explosion';
 import useUser from "@/lib/useUser";
+import { configDotenv } from "dotenv";
+import { useRouter } from "next/router";
+
+configDotenv();
 
 const FormSchema = z.object({
   email: z.string().email().min(5),
@@ -44,16 +48,14 @@ async function sendEmailToUser(to: string, isSignUp: boolean = true) {
     to, 
     template: EmailTemplate.AccountConfirmation,
     args: {
-      confirmationLink: `https://${typeof window !== 'undefined' ? window.location.hostname : '<ERROR>'}/confirm-account/${code.id}`
+      confirmationLink: `${process.env.BASE_URL}/confirm-account/${code.id}`
     }
   });
 }
 
 export function UserAuthForm({ className, isSignUp, ...props }: UserAuthFormProps) {
-  useUser({
-    redirectTo: '/app',
-    redirectIfFound: true,
-  });
+  //const router = useRouter();
+  //useUser(() => router.push("/app"));
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [result, setResult] = React.useState("");
@@ -69,7 +71,7 @@ export function UserAuthForm({ className, isSignUp, ...props }: UserAuthFormProp
     setEmail(email);
 
     try {
-      await sendEmailToUser(email);
+      await sendEmailToUser(email, isSignUp);
       setStatusCode(200);
       setResult("ok")
     } catch (error) {

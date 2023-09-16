@@ -1,6 +1,7 @@
 
 import { db } from "@/lib/db";
 import { getActivationFromSlug } from "@/lib/profiles";
+import { session } from "@/lib/session";
 import { redirect } from 'next/navigation';
 
 export async function GET(req: Request,
@@ -12,6 +13,20 @@ export async function GET(req: Request,
 
     if (activation.forCreation) 
         redirect('/account-creation?id=' + activation.id);
-    else
-        throw new Error('TODO: implement account signin');
+    else {
+        const user = await db.user.findUnique({
+            where: {
+                email: activation.email
+            }
+        });
+        if (!user)
+            return redirect('/sign-up');
+        else {
+            await session().set("id", user.id)
+          
+            // fetch the user and login
+            // redirect to the dashboard
+            return redirect('/app'); // todo: add device to the list of devices
+        }
+    }
 }
