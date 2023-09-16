@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Alert } from "@/components/ui/alert";
 import { sendEmail } from "@/lib/email";
 import { EmailTemplate } from '@/lib/constants';
-import { getVerificationCode } from '@/lib/profiles';
+import { doesUserEmailExist, getVerificationCode } from '@/lib/profiles';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -66,9 +66,14 @@ export function UserAuthForm({ className, isSignUp, ...props }: UserAuthFormProp
     setEmail(email);
 
     try {
-      await sendEmailToUser(email, isSignUp);
-      setStatusCode(200);
-      setResult("ok")
+      if (await doesUserEmailExist(email)) {
+        setStatusCode(400);
+        setResult("This email is already in use. Please try again.");
+      } else {
+        await sendEmailToUser(email, isSignUp);
+        setStatusCode(200);
+        setResult("ok")
+      }
     } catch (error) {
       setStatusCode(505);
       setResult("Something went wrong. Please try again later.");
@@ -100,13 +105,15 @@ export function UserAuthForm({ className, isSignUp, ...props }: UserAuthFormProp
                     autoCorrect="off"
                     disabled={isLoading}
                     {...field}
+                    data-aos="fade-right"
+                    data-aos-delay="200"
                   />
                 </FormControl>
                 <FormMessage className="my-2 text-red-500" />
               </>
             )}
           />
-            <Button disabled={isLoading}>
+            <Button disabled={isLoading} data-aos="fade-right" data-aos-delay="300">
               {isLoading && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               ) || (

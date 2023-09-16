@@ -7,7 +7,8 @@ export default async function useUser(
   redirectIfFound: boolean = false
 ) {
   const { id } = useSWR('/api/user', { method: 'GET' });
-
+  console.log(id)
+  console.log(redirectIfFound)
   if ((id && redirectIfFound) || (!id && !redirectIfFound)) {
     redirectHandle();
   }

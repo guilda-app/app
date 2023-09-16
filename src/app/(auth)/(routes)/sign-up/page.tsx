@@ -9,9 +9,7 @@ import useUser from "@/lib/useUser";
 
 export default function AuthenticationPage() {  
   const router = useRouter();
-  try {
-    useUser(() => router.push("/app"), true);
-  } catch(e) { /* noop */}
+  useUser(() => router.push("/app"), true);
   
   return (
     <>
@@ -42,15 +40,15 @@ export default function AuthenticationPage() {
         <div className="lg:p-8">
             <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-center">
-                <h1 className="text-2xl font-semibold tracking-tight">
+                <h1 data-aos="fade-down" data-aos-delay="100" className="text-2xl font-semibold tracking-tight">
                 New to Guilda? Sign up!
                 </h1>
-                <p className="text-sm text-muted-foreground">
+                <p data-aos="fade-down" className="text-sm text-muted-foreground">
                 Enter your email below to create your account
                 </p>
             </div>
             <UserAuthForm isSignUp={true} />
-            <p className="px-8 text-center text-sm text-muted-foreground">
+            <p data-aos="fade-up" data-aos-delay="400" className="px-8 text-center text-sm text-muted-foreground">
                 By clicking continue, you agree to our{" "}
                 <Link
                 href="/terms"

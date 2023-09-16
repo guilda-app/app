@@ -22,7 +22,7 @@ export async function GET(req: Request,
         if (!user)
             return redirect('/sign-up');
         else {
-            await session().set("id", user.id)
+            await session(req).set("id", user.id)
           
             // fetch the user and login
             // redirect to the dashboard

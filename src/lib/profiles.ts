@@ -14,14 +14,11 @@ export async function getVerificationCode(email: string, forCreation: boolean) {
 
 export async function createProfile({
   name,
-  email,
-  activationId,
+  email
 }: {
   name: string;
   email: string;
-  activationId: string;
 }) {
-  await removeActivation(activationId);
   const user = await db.user.create({
     data: {
       email,
@@ -39,6 +36,14 @@ export async function createProfile({
   return profile;
 }
 
+export async function doesUserEmailExist(email: string) {
+  return await db.user.findFirst({
+    where: {
+      email,
+    },
+  }) !== null;
+}
+
 export async function getActivationFromSlug(slug: string) {
   const code = await db.verificationCode.findUnique({
     where: {
@@ -50,13 +55,17 @@ export async function getActivationFromSlug(slug: string) {
 }
 
 export async function getProfileFromEmail(email: string) {
-  const profile = await db.profile.findUnique({
+  const user = await db.user.findUnique({
     where: {
       email,
     },
-  });
+  }) as any;
 
-  return profile;
+  return await db.profile.findUnique({
+    where: {
+      userId: user.id,
+    },
+  });
 }
 
 export async function removeActivation(id: string) {

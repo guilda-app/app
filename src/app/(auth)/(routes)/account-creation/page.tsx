@@ -10,8 +10,9 @@ import React from "react";
 import { createProfile, getActivationFromSlug } from "@/lib/profiles";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { session } from "@/lib/session";
+import { updateCookies } from "@/lib/cookies";
 import useUser from "@/lib/useUser";
+import fetchJson from "@/lib/fetchJSON";
 
 export default function AuthenticationPage() {
   const router = useRouter();
@@ -38,17 +39,20 @@ export default function AuthenticationPage() {
     e.preventDefault();
     setIsLoading(true);
 
-    const profile = await createProfile({
+    await createProfile({
       email,
       name: e.currentTarget.username.value,
-      activationId: verificationId,
+    });
+    
+    await fetchJson("/api/activate-for-code-id", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        activationId: verificationId,
+      }),
     });
 
-    //await session.set("id", profile.userId)
-
-    if (typeof window !== 'undefined') {
-      window.location.reload();
-    }
+    router.push("/app");
   }
 
   return (
@@ -72,17 +76,17 @@ export default function AuthenticationPage() {
         <div className="lg:p-8">
             <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-center">
-                <h1 className="text-2xl font-semibold tracking-tight">
+                <h1 data-aos="fade-down" data-aos-delay="100" className="text-2xl font-semibold tracking-tight">
                 Finish your account creation!
                 </h1>
-                <p className="text-sm text-muted-foreground">
+                <p data-aos="fade-down" className="text-sm text-muted-foreground">
                 Enter your username below to finish your account creation
                 </p>
             </div>
             <div className={cn("grid gap-6")}>
               <form onSubmit={onSubmit}>
                 <div className="grid gap-2">
-                  <Label className="mt-2" htmlFor="email">
+                  <Label className="mt-2" data-aos="fade-right" data-aos-delay="150" htmlFor="email">
                     Email
                   </Label>
                   <Input
@@ -94,8 +98,10 @@ export default function AuthenticationPage() {
                     autoCorrect="off"
                     disabled={true}
                     value={email}
+                    data-aos="fade-right" 
+                    data-aos-delay="200"
                   />
-                  <Label className="mt-4" htmlFor="username">
+                  <Label data-aos="fade-right" data-aos-delay="250" className="mt-4" htmlFor="username">
                     Username
                   </Label>
                   <Input
@@ -105,8 +111,10 @@ export default function AuthenticationPage() {
                     autoCapitalize="none"
                     autoCorrect="off"
                     disabled={isLoading}
+                    data-aos="fade-right"
+                    data-aos-delay="300"
                   />
-                  <Button className="mt-4" disabled={isLoading}>
+                  <Button className="mt-4" disabled={isLoading} data-aos="fade-up" data-aos-delay="400">
                     {isLoading && (
                       <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                     ) || (
