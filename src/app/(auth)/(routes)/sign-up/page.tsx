@@ -4,18 +4,17 @@ import Link from "next/link"
 
 import { cn } from "@/lib/utils"
 import { UserAuthForm } from "@/components/auth-form"
-import { Icons } from "@/components/icons"
-import { sendEmail } from "@/lib/email";
+import { Icons } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Authentication",
   description: "Authentication forms built using the components.",
 }
 
-export default function AuthenticationPage() {
+export default function AuthenticationPage() {  
   return (
     <>
-        <div className="container relative hidden h-full flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+      <div className="container relative hidden h-full flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Link
             href="/sign-in"
             className={cn(
@@ -49,7 +48,7 @@ export default function AuthenticationPage() {
                 Enter your email below to create your account
                 </p>
             </div>
-            <UserAuthForm />
+            <UserAuthForm isSignUp={true} />
             <p className="px-8 text-center text-sm text-muted-foreground">
                 By clicking continue, you agree to our{" "}
                 <Link

@@ -1,13 +1,11 @@
 'use server';
 
-import { SMTPClient } from 'emailjs';
 import WelcomeEmail from '@/emails/welcome';
 import { EmailTemplate } from '@/lib/constants';
 import { Resend } from 'resend';
 
-
 declare global {
-    var emailClient: SMTPClient | undefined
+    var emailClient: Resend | undefined
 }
 
 const emailClient = globalThis.emailClient || new Resend(process.env.RESEND_KEY as string)

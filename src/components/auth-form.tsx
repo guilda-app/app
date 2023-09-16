@@ -9,17 +9,13 @@ import { Label } from "@/components/ui/label";
 import { Alert } from "@/components/ui/alert";
 import { sendEmail } from "@/lib/email";
 import { EmailTemplate } from '@/lib/constants';
-import { getVerificationCode } from '@/lib/create-profile';
+import { getVerificationCode } from '@/lib/profiles';
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
-  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
   Form,
@@ -32,6 +28,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import ConfettiExplosion from 'react-confetti-explosion';
+import useUser from "@/lib/useUser";
 
 const FormSchema = z.object({
   email: z.string().email().min(5),
@@ -41,8 +38,8 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   isSignUp: boolean;
 }
 
-async function sendEmailToUser(to: string) {
-  const code = await getVerificationCode(to);
+async function sendEmailToUser(to: string, isSignUp: boolean = true) {
+  const code = await getVerificationCode(to, isSignUp);
   return await sendEmail({
     to, 
     template: EmailTemplate.AccountConfirmation,
@@ -53,6 +50,11 @@ async function sendEmailToUser(to: string) {
 }
 
 export function UserAuthForm({ className, isSignUp, ...props }: UserAuthFormProps) {
+  useUser({
+    redirectTo: '/app',
+    redirectIfFound: true,
+  });
+
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [result, setResult] = React.useState("");
   const [responseStatusCode, setStatusCode] = React.useState<number>(0);

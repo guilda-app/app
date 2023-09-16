@@ -5,6 +5,7 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { UserAuthForm } from "@/components/auth-form"
 import { Icons } from "@/components/icons"
+import useUser from "@/lib/useUser"
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -12,9 +13,14 @@ export const metadata: Metadata = {
 }
 
 export default function AuthenticationPage() {
-    return (
+  useUser({
+    redirectTo: '/app',
+    redirectIfFound: true,
+  })
+
+  return (
     <>
-        <div className="container relative hidden h-full flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+      <div className="container relative hidden h-full flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Link
             href="/sign-up"
             className={cn(
@@ -48,10 +54,10 @@ export default function AuthenticationPage() {
                 Enter your email below to sign into your account
                 </p>
             </div>
-            <UserAuthForm />
-            </div>
+            <UserAuthForm isSignUp={false} />
+          </div>
         </div>
-        </div>
+      </div>
     </>
-    )
+  )
 }

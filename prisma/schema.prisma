@@ -16,14 +16,14 @@ model User {
   profile   Profile?
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
 }
 
 model Profile {
   id        String   @id @default(uuid())
   userId    String   @unique
   name      String
-  imageUri  String  
+  imageUri  String
 
   servers   Server[]
   members   Member[]
@@ -104,7 +104,8 @@ model Channel {
 }
 
 model verificationCode {
-  id        String   @id @default(uuid()) @unique
-  email     String
-  createdAt DateTime @default(now())
+  id          String   @id @default(uuid()) @unique
+  email       String
+  createdAt   DateTime @default(now())
+  forCreation Boolean  @default(true)
 }
