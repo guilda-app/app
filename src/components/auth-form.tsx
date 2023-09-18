@@ -14,6 +14,7 @@ import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogDescription,
+  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
@@ -66,7 +67,7 @@ export function UserAuthForm({ className, isSignUp, ...props }: UserAuthFormProp
     setEmail(email);
 
     try {
-      if (await doesUserEmailExist(email)) {
+      if (await doesUserEmailExist(email) && isSignUp) {
         setStatusCode(400);
         setResult("This email is already in use. Please try again.");
       } else {
@@ -131,6 +132,13 @@ export function UserAuthForm({ className, isSignUp, ...props }: UserAuthFormProp
                           <AlertDialogTitle>Email sent successfully!</AlertDialogTitle>
                           <AlertDialogDescription>
                             Please check your email (<b>{email}</b>) to confirm your account.
+                            {!isSignUp && (
+                              <>
+                                <br />
+                                <br />
+                                If you didn't receive an email, please check your spam folder. The email will only be sent if the account exists.
+                              </>
+                            )}
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <ConfettiExplosion className="absolute top-50 left-48" width={1700} force={0.6} zIndex={1} />

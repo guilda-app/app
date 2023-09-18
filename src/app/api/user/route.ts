@@ -3,6 +3,7 @@ import { session } from '@/lib/session';
 import { NextResponse } from 'next/server';
 
 export async function GET(req, res) {
+  console.log(req.cookies)
   if (!await session(req).has('id')) 
       return NextResponse.json({ error: 'Not logged in' });
   let id = await session(req).get('id');

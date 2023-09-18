@@ -1,7 +1,7 @@
 
 import { db } from "@/lib/db";
-import { getActivationFromSlug } from "@/lib/profiles";
-import { session } from "@/lib/session";
+import fetchClient from "@/lib/fetch-client";
+import { getActivationFromSlug, removeActivation } from "@/lib/profiles";
 import { redirect } from 'next/navigation';
 
 export async function GET(req: Request,
@@ -9,7 +9,7 @@ export async function GET(req: Request,
     const slug = params.slug;
     let activation = await getActivationFromSlug(slug);
     if (!activation)
-        return redirect('/sign-up');
+        return redirect('/register');
 
     if (activation.forCreation) 
         redirect('/account-creation?id=' + activation.id);
@@ -20,9 +20,27 @@ export async function GET(req: Request,
             }
         });
         if (!user)
-            return redirect('/sign-up');
+            return redirect('/register');
         else {
-            await session(req).set("id", user.id)
+            const response = await fetchClient({
+                method: "POST",
+                url: process.env.BASE_URL + "/api/auth/login",
+                body: JSON.stringify({
+                    id: user.id,
+                }),
+            });
+
+            if (!response.ok) {
+                throw response;
+            }
+
+            const data: { user: any; access_token: string } = await response.json();
+
+            if (!data?.access_token) {
+                throw response;
+            }
+            
+            await removeActivation(slug);
           
             // fetch the user and login
             // redirect to the dashboard

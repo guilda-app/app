@@ -6,19 +6,15 @@ import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React from "react";
+import React, { useEffect } from "react";
 import { createProfile, getActivationFromSlug } from "@/lib/profiles";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { updateCookies } from "@/lib/cookies";
-import useUser from "@/lib/useUser";
 import fetchJson from "@/lib/fetchJSON";
 
 export default function AuthenticationPage() {
   const router = useRouter();
   let query = useSearchParams();
-
-  useUser(() => router.push("/app"), true);
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [email, setEmail] = React.useState("");
