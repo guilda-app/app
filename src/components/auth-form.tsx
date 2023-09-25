@@ -29,9 +29,9 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import ConfettiExplosion from 'react-confetti-explosion';
-import { configDotenv } from "dotenv";
+import { config as configurateDotEnv } from "dotenv";
 
-configDotenv();
+configurateDotEnv();
 
 const FormSchema = z.object({
   email: z.string().email().min(5),
@@ -47,7 +47,7 @@ async function sendEmailToUser(to: string, isSignUp: boolean = true) {
     to, 
     template: EmailTemplate.AccountConfirmation,
     args: {
-      confirmationLink: `${process.env.BASE_URL}/confirm-account/${code.id}`
+      confirmationLink: `${(typeof window !== 'undefined') ? window.location.origin : process.env.BASE_URL}/confirm-account/${code.id}`
     }
   });
 }

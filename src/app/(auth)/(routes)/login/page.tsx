@@ -10,7 +10,7 @@ export default async function AuthenticationPage() {
     <>
       <div className="container relative hidden h-full flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Link
-            href="/sign-up"
+            href="/register"
             className={cn(
               "absolute font-bold right-4 top-4 md:right-8 md:top-8"
             )}

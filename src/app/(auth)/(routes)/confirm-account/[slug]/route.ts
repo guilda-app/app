@@ -22,23 +22,8 @@ export async function GET(req: Request,
         if (!user)
             return redirect('/register');
         else {
-            const response = await fetchClient({
-                method: "POST",
-                url: process.env.BASE_URL + "/api/auth/login",
-                body: JSON.stringify({
-                    id: user.id,
-                }),
-            });
 
-            if (!response.ok) {
-                throw response;
-            }
-
-            const data: { user: any; access_token: string } = await response.json();
-
-            if (!data?.access_token) {
-                throw response;
-            }
+            throw new Error("Not implemented");
             
             await removeActivation(slug);
           

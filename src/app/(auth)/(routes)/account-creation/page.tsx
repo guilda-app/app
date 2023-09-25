@@ -7,10 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React, { useEffect } from "react";
-import { createProfile, getActivationFromSlug } from "@/lib/profiles";
+import { createProfile, getActivationFromSlug, removeActivation } from "@/lib/profiles";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import fetchJson from "@/lib/fetchJSON";
+import { login } from "@/lib/auth";
 
 export default function AuthenticationPage() {
   const router = useRouter();
@@ -26,29 +26,23 @@ export default function AuthenticationPage() {
       getActivationFromSlug(verificationId).then((activation) => {
         if (activation) {
           setEmail(activation.email);
-        } else router.push("/sign-up");
+        } else router.push("/register");
       })
-    } else router.push("/sign-up");
+    } else router.push("/register");
   }, [verificationId]);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
 
-    await createProfile({
+    let user = await createProfile({
       email,
       name: e.currentTarget.username.value,
     });
-    
-    await fetchJson("/api/activate-for-code-id", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        activationId: verificationId,
-      }),
-    });
 
-    router.push("/app");
+    await removeActivation(verificationId);
+    login({ id: user.id });
+    window.location.reload();
   }
 
   return (

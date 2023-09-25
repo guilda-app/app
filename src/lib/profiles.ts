@@ -1,6 +1,7 @@
 'use server';
 
 import { db } from "@/lib/db";
+import { Profile } from "@prisma/client";
 
 export async function getVerificationCode(email: string, forCreation: boolean) {
   const code = await db.verificationCode.create({
@@ -33,7 +34,7 @@ export async function createProfile({
     },
   });
 
-  return profile;
+  return user;
 }
 
 export async function doesUserEmailExist(email: string) {
@@ -72,6 +73,30 @@ export async function removeActivation(id: string) {
   await db.verificationCode.delete({
     where: {
       id,
+    },
+  });
+}
+
+export async function getUserFromID(id: string) {
+  return await db.user.findUniqueOrThrow({
+    where: {
+      id,
+    },
+  });
+}
+
+export async function getProfileFromUser(id: string) {
+  return await db.profile.findUniqueOrThrow({
+    where: {
+      userId: id,
+    },
+  });
+}
+
+export async function getProfileServerList(profile: Profile) {
+  return await db.server.findMany({
+    where: {
+      profileId: profile.id,
     },
   });
 }
