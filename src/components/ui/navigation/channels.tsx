@@ -75,7 +75,9 @@ export default function ({
                         <DropdownMenuPortal>
                         <DropdownMenuSubContent>
                             {serverInvites.map((invite) => (
-                                <DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => {
+                                    navigator.clipboard.writeText(`${window.location.origin}/invite/${invite.code}`)
+                                }}>
                                     <Link className="mr-2 h-4 w-4" />
                                     <span>invite with code "{invite.code}"</span>
                                 </DropdownMenuItem>

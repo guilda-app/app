@@ -43,6 +43,7 @@ model Invite {
   serverId  String
   server    Server   @relation(fields: [serverId], references: [id], onDelete: Cascade)
 
+  deleteAt  DateTime? // if null, invite lasts forever
   createdAt DateTime @default(now())
 
   @@index([serverId])

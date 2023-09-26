@@ -22,5 +22,5 @@ export default async function middleware(request) {
   }
 }
 
-const authRoutes = ["/app"];
+const authRoutes = ["/app", "/invite"];
 const guestRoutes = ["/login", "/account-creation", "/confirm-account", "/password-reset", "/register"];
