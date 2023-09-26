@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ChannelHeader from "@/components/ui/app/channels/header";
 import ChatInput from "@/components/ui/app/chat/chat-input";
+import Messages from "@/components/ui/app/chat/messages";
 
 export default function ({
     params
@@ -40,7 +41,18 @@ export default function ({
     return isMounted ? (
         <div className="h-full flex flex-col">
             <ChannelHeader channel={channel} />
-            <div className="flex-1">[messages here]</div>
+            <Messages 
+                member={member as Member}
+                name={channel?.name as string}
+                apiUrl="/api/messages"
+                socketUrl="/api/socket/messages"
+                socketQuery={{
+                    channelId: channel?.id as string,
+                    serverId: serverId,
+                }}
+                paramKey="channelId"
+                paramValue={channelId}
+            />
             <ChatInput 
                 name={channel?.name as string}
                 apiUrl="/api/socket/messages"

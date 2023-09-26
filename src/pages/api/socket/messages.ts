@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
     if (req.method != 'POST') return res.status(405).end();
 
     try {
-        const user = await getCurrentProfilePages(req);
+        const user = await getCurrentProfilePages(req, true);
         const { content, fileUrl } = req.body;
         const { serverId, channelId } = req.query;
 

@@ -138,7 +138,7 @@ export default function ({
                 </DropdownMenu>
                 <Separator className="mt-2 mb-2" />
                 <Section text="Server channels" className="mt-5" />
-                {server.channels.map((channel) => (
+                {server.channels?.map((channel) => (
                     <div className="group relative flex items-center overflow-hidden cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1 text-muted-foreground" key={channel.id} onClick={() => {
                         router.push(`/app/server/${server.id}/channel/${channel.id}`);
                     }}>

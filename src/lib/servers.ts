@@ -44,11 +44,12 @@ export async function createNewServer({
     return server;
 }
 
-export async function getServerFromId(id: string) {
+export async function getServerFromId(id: string, extraArgs = {}) {
     return await db.server.findUnique({
         where: {
             id
-        }
+        },
+        ...extraArgs
     });
 }
 

@@ -131,7 +131,7 @@ export default function CreateChannelDialog() {
                     />
                 </Form>
                 <AlertDialogFooter className="mt-2">
-                    <AlertDialogAction onClick={form.handleSubmit(onSubmit)}>Create server</AlertDialogAction>
+                    <AlertDialogAction onClick={form.handleSubmit(onSubmit)}>Create Channel</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

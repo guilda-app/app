@@ -113,7 +113,7 @@ export default function ({ user }: { user: FullUser }) {
                             </div>
                         </div>
                         <div onClick={openNewServerDialog} className="flex rounded-md items-center space-between mt-1 px-2 py-1 hover:bg-zinc-900 w-full trnaistion-all duration-150 cursor-pointer">
-                            <PlusCircleIcon className="group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 h-4 w-4 mr-4 ml-1 opacity-50" />
+                            <PlusCircleIcon className="group-hover:block w-6 h-6 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 h-4 w-4 mr-4 ml-1 opacity-50" />
                             <div className="hover:!bg-none text-sm w-full font-semibold p-0 text-left">
                                 Create a server
                             </div>

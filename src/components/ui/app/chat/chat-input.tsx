@@ -53,7 +53,7 @@ export default function({ apiUrl, query, name }: {
                         <FormItem>
                             <FormControl>
                                 <div className="relative p-4">
-                                    <button type="button" onClick={() => {}} className="absolute top-7 border left-8 h-[24px] w-[24px] bg-zinc-900 hover:bg-zinc-800 transitipon rounded-full p-1 flex items-center justify-center">
+                                    <button type="button" onClick={() => {}} className="absolute top-7 border ml-1 left-8 h-[24px] w-[24px] bg-zinc-900 hover:bg-zinc-800 transitipon rounded-full p-1 flex items-center justify-center">
                                         <PlusIcon className="w-5 h-5 text-white" />
                                     </button>
                                     <Input

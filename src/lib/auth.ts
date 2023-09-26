@@ -1,4 +1,3 @@
-"use client";
 import Cookies from "js-cookie";
 import jwt from "jsonwebtoken";
 
