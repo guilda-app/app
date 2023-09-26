@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db";
 import { Profile } from "@prisma/client";
+import { Server } from "@/lib/types"
 
 export async function getVerificationCode(email: string, forCreation: boolean) {
   const code = await db.verificationCode.create({
@@ -55,18 +56,12 @@ export async function getActivationFromSlug(slug: string) {
   return code;
 }
 
-export async function getProfileFromEmail(email: string) {
-  const user = await db.user.findUnique({
+export async function getUserFromEmail(email: string) {
+  return await db.user.findUnique({
     where: {
       email,
     },
-  }) as any;
-
-  return await db.profile.findUnique({
-    where: {
-      userId: user.id,
-    },
-  });
+  })
 }
 
 export async function removeActivation(id: string) {
@@ -93,10 +88,19 @@ export async function getProfileFromUser(id: string) {
   });
 }
 
-export async function getProfileServerList(profile: Profile) {
+export async function getProfileServerList(profile: Profile): Promise<Server[]> {
   return await db.server.findMany({
     where: {
-      profileId: profile.id,
+      members: {
+        some: {
+          profileId: profile.id
+        }
+      }
     },
+    include: {
+      invites: true,
+      channels: true,
+      members: true
+    }
   });
 }

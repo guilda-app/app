@@ -17,21 +17,13 @@ import { Label } from "@/components/ui/label";
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { createNewServer } from "@/lib/servers";
-import { Server } from "@prisma/client";
+import { useModal } from "../../../hooks/use-modal-store";
+import { CrossIcon, CrosshairIcon, X } from "lucide-react";
 
-export default function CreateServerDialog({
-    openByDefault = false,
-    defaultServerName = "",
-    profileId,
-    onCreated,
-}: {
-    openByDefault?: boolean;
-    defaultServerName?: string;
-    profileId: string;
-    onCreated?: (server: Server) => void;
-}) {
+export default function CreateServerDialog() {
+    const { isOpen, onClose, modal, modalArgs } = useModal();
     const [isLoading, setIsLoading] = React.useState(false);
-    const [isOpen, setIsOpen] = React.useState(openByDefault);
+    const { defaultServerName = "", profileId, onCreated, canClose } = modalArgs;
     const FormSchema = z.object({
         name: z.string({
             description: "Server name",
@@ -44,20 +36,31 @@ export default function CreateServerDialog({
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
     });
+    const isModalOpen = isOpen && modal == "createServer";
     
     const onSubmit = async ({
         name
     }: { name: string }) => {
         setIsLoading(true);
         let server = await createNewServer({name, profileId});
-        setIsOpen(false);
+        handleClose();
         setIsLoading(false);
         onCreated?.(server);
     }
 
+    const handleClose = () => {
+        form.reset();
+        onClose();
+    }
+
     return (
-        <AlertDialog defaultOpen={openByDefault} open={isOpen}>
+        <AlertDialog open={isModalOpen} onOpenChange={handleClose}>
             <AlertDialogContent>
+                {canClose && (
+                    <div className="absolute top-4 right-4">
+                        <X className="w-5 h-5 text-white cursor-pointer" onClick={handleClose} />
+                    </div>
+                )}
                 <AlertDialogHeader>
                     <AlertDialogTitle>Create a new server! 🥳</AlertDialogTitle>
                     <AlertDialogDescription>
@@ -73,7 +76,7 @@ export default function CreateServerDialog({
                                 <Label htmlFor="name">
                                     Server name
                                 </Label>
-                                <FormControl className="mt-2">
+                                <FormControl>
                                     <Input
                                         id="name"
                                         placeholder={defaultServerName}

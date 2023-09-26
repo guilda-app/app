@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { FullUser } from "@/lib/types";
+import { FullUser, Server } from "@/lib/types";
 import { getProfileFromUser, getProfileServerList, getUserFromID } from "./profiles";
 import { getIDFromToken, getTokenFromCookies } from "@/lib/auth";
 
@@ -10,7 +10,6 @@ export function useCurrentUser() {
   useEffect(() => {
     async function fetchUser() {
         let currentUser = await getTokenFromCookies(Cookies);
-        console.log(currentUser)
         if (currentUser) {
             let id = getIDFromToken(currentUser);
             try {
@@ -43,7 +42,7 @@ export function useCurrentUser() {
 };
 
 export function useUserServerList(user: FullUser | null) {
-    const [list, setList ] = useState<any[]>([]);
+    const [list, setList ] = useState<Server[]>([]);
     const [loadedList, setLoadedList] = useState<boolean>(false);
 
     useEffect(() => {

@@ -4,8 +4,31 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { UserAuthForm } from "@/components/auth-form"
 import { Icons } from "@/components/icons"
+import { useRouter, useSearchParams } from "next/navigation";
+import { getActivationFromSlug, getUserFromEmail, removeActivation } from "@/lib/profiles";
+import { login } from "@/lib/auth";
+import { useEffect, useState } from "react";
 
-export default async function AuthenticationPage() {
+export default function AuthenticationPage() {
+  const params = useSearchParams();
+  const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    async function render() {
+      if (params.has("slug")) {
+        let slug = params.get("slug") as string;
+        let activation = await getActivationFromSlug(slug) as any;
+        await removeActivation(activation.id);
+        let user = await getUserFromEmail(activation.email);
+        if (user)
+          login({ id: user.id });
+        router.push("/app");
+      }
+      setIsMounted(true);
+    }
+    render()
+  }, []);
+
   return (
     <>
       <div className="container relative hidden h-full flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
@@ -42,7 +65,7 @@ export default async function AuthenticationPage() {
                 Enter your email below to sign into your account
                 </p>
             </div>
-            <UserAuthForm isSignUp={false} />
+            {isMounted ? <UserAuthForm isSignUp={false} /> : null} {/*TODO: loading animation*/}
           </div>
         </div>
       </div>

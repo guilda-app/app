@@ -1,7 +1,6 @@
 
 import { db } from "@/lib/db";
-import fetchClient from "@/lib/fetch-client";
-import { getActivationFromSlug, removeActivation } from "@/lib/profiles";
+import { getActivationFromSlug } from "@/lib/profiles";
 import { redirect } from 'next/navigation';
 
 export async function GET(req: Request,
@@ -22,14 +21,7 @@ export async function GET(req: Request,
         if (!user)
             return redirect('/register');
         else {
-
-            throw new Error("Not implemented");
-            
-            await removeActivation(slug);
-          
-            // fetch the user and login
-            // redirect to the dashboard
-            return redirect('/app'); // todo: add device to the list of devices
+            return redirect(`/login?slug=${slug}`); // todo: add device to the list of devices
         }
     }
 }
