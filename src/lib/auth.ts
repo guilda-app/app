@@ -18,15 +18,17 @@ export async function logout() {
     Cookies.remove("currentUser");
 }
 
-export async function getTokenFromCookies(cookies: any) {
+export async function getTokenFromCookies(cookies: any, fromPages: boolean = false) {
     let token = null as string | null;
     try {
-        if (cookies.get("currentUser")?.value) {
+        if (fromPages) {
+            token = JSON.parse(cookies["currentUser"])["accessToken"];
+        } else if (cookies.get("currentUser")?.value) {
             token = JSON.parse(cookies.get("currentUser")?.value)["accessToken"];;
         } else {
-            token = JSON.parse(cookies.get("currentUser"))["accessToken"];;
+            token = JSON.parse(cookies.get("currentUser"))["accessToken"];
         }
-    } catch(e) {}
+    } catch(e) {/*console.error("[FETCH_TOKEN]", `(pages: ${fromPages})`, e)*/}
     return token;
 }
 

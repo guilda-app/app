@@ -5,6 +5,7 @@ import { Invite, Profile, Server } from "@prisma/client";
 import { v4 as uuidv4 } from 'uuid';
 import { ChannelType } from "./channel";
 import { MemberRole } from "./members";
+import { PopulatedServer } from "./types";
 
 export async function createNewServer({
     name,
@@ -51,6 +52,22 @@ export async function getServerFromId(id: string) {
     });
 }
 
+export async function getServerFromIdWithVerification(id: string, profileId: string): Promise<PopulatedServer | null> {
+    return await db.server.findFirst({
+        where: {
+            id,
+            members: {
+                some: {
+                    profileId
+                }
+            }
+        },
+        include: {
+            members: true
+        }
+    });
+}
+
 export async function getInviteFromCode(code: string) {
     try {
         return await db.invite.findUnique({
@@ -86,6 +103,57 @@ export async function joinServerFromInvite(invite: Invite, profile: Profile) {
                     }
                 ]
             }
+        }
+    });
+}
+
+export async function createChannelInServer(server: Server, name: string, type: ChannelType, profileId: string) {
+    return await db.server.update({
+        where: {
+            id: server.id,
+            members: {
+                some: {
+                    profileId,
+                    role: {
+                        in: [MemberRole.owner, MemberRole.admin]
+                    }
+                }
+            }
+        },
+        data: {
+            channels: {
+                create: {
+                    name,
+                    type,
+                    profileId
+                }
+            }
+        }
+    });
+}
+
+export async function getChannelFromId(channelId: string) {
+    return await db.channel.findFirst({
+        where: {
+            id: channelId
+        }
+    });
+}
+
+export async function getChannelFromServer(serverId: string, channelId: string) {
+    return await db.channel.findFirst({
+        where: {
+            id: channelId,
+            serverId
+        }
+    });
+}
+
+export async function getServerMember(serverId: string, profileId: string) {
+    return await db.member.findFirst({
+        where: {
+            serverId,
+            profileId
         }
     });
 }

@@ -70,13 +70,15 @@ model Server {
 
 model Member {
   id        String           @id @default(uuid())
-  role      Int              @default(0) // 0: member, 1: moderator, 2: admin
+  role      Int              @default(0) // 0: member, 1: moderator, 2: admin, 3: owner
 
   profileId String
   profile   Profile          @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   serverId  String
   server    Server           @relation(fields: [serverId], references: [id], onDelete: Cascade)
+
+  messages  Message[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -94,6 +96,8 @@ model Channel {
 
   profileId String
   profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  messages  Message[]
 
   // export enum MemberRole {
   //     member = 0,
@@ -115,4 +119,24 @@ model verificationCode {
   email       String
   createdAt   DateTime @default(now())
   forCreation Boolean  @default(true)
+}
+
+model Message {
+  id String @id @default(uuid())
+  content String 
+
+  fileUrl String?
+  memberId String
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  channelId String
+  channel Channel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+
+  deleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([memberId])
+  @@index([channelId])
 }

@@ -19,18 +19,25 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MemberRole } from "@/lib/members";
+import { useModal } from "../../../../hooks/use-modal-store";
+import { ActionTooltip } from "../action-tooltip";
+import { cn } from "@/lib/utils";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function ({
     server,
-    user
+    user,
 }: { server: Server | null, user: FullUser }) {
     if (!server) return null;
+    const { onOpen } = useModal();
     const role = server.members?.find((member) => member.profileId === user.profile.id)?.role as MemberRole;
 
     const isAdmin = role >= MemberRole.admin;
     const isModerator = isAdmin || role === MemberRole.moderator;
 
     const serverInvites = server.invites;
+    const params = useSearchParams();
+    const router = useRouter();
 
     return (
         <div className="mt-5">
@@ -59,7 +66,17 @@ export default function ({
                     {isModerator && (
                         <>
                             <DropdownMenuGroup>
-                                <DropdownMenuItem>
+                                <DropdownMenuItem onClick={(
+                                    () => {
+                                        onOpen("createChannel", {
+                                            profileId: user.profile.id,
+                                            server,
+                                            onCreated: () => {
+                                                console.log("channel created")
+                                            }
+                                        });
+                                    }
+                                )}>
                                     <PlusCircleIcon className="mr-2 h-4 w-4" />
                                     <span>Create new channel</span>
                                 </DropdownMenuItem>
@@ -74,7 +91,7 @@ export default function ({
                         </DropdownMenuSubTrigger>
                         <DropdownMenuPortal>
                         <DropdownMenuSubContent>
-                            {serverInvites.map((invite) => (
+                            {serverInvites?.map((invite) => (
                                 <DropdownMenuItem onClick={() => {
                                     navigator.clipboard.writeText(`${window.location.origin}/invite/${invite.code}`)
                                 }}>
@@ -122,9 +139,19 @@ export default function ({
                 <Separator className="mt-2 mb-2" />
                 <Section text="Server channels" className="mt-5" />
                 {server.channels.map((channel) => (
-                    <div className="relative flex items-center overflow-hidden cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1 text-muted-foreground" key={channel.id}>
-                        {channel.type == ChannelType.text ? (<HashIcon className="mr-3 w-4 h-4" />) : (<MegaphoneIcon className="mr-3 w-4 h-4" />)}
-                        <div className="!p-0 truncate text-sm font-semibold">{channel.name}</div>
+                    <div className="group relative flex items-center overflow-hidden cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1 text-muted-foreground" key={channel.id} onClick={() => {
+                        router.push(`/app/server/${server.id}/channel/${channel.id}`);
+                    }}>
+                        {channel.type == ChannelType.text ? (<HashIcon className="flex-shrink-0 w-5 h-5 text-zinc-500 dark:text-zinc-400 mr-3 w-4 h-4" />) : (<MegaphoneIcon className="flex-shrink-0 w-5 h-5 text-zinc-500 dark:text-zinc-400 mr-3 w-4 h-4" />)}
+                        <div className={cn(
+                            "line-clamp-1 font-semibold text-sm text-zinc-500 group-hover:text-zinc-600 dark:text-zinc-400 dark:group-hover:text-zinc-300 transition",
+                            params?.channelId === channel.id && "text-primary dark:text-zinc-200 dark:group-hover:text-white"
+                        )}>{channel.name}</div>
+                        {isAdmin && (
+                            <ActionTooltip label="Channel settings" side="right">
+                                <Settings className="transition-all duration-300 group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 w-4 h-4 hidden opacity-0 group-hover:opacity-100 group-hover:block ml-auto cursor-pointer" />
+                            </ActionTooltip>
+                        )}
                     </div>
                 ))}
             </div>

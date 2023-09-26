@@ -2,6 +2,7 @@ import { FullUser } from "@/lib/types";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Settings } from "lucide-react";
+import { SocketIndicator } from "../socket-indicator";
 
 export default function ({
     user
@@ -22,11 +23,12 @@ export default function ({
                     <AvatarImage src={user.profile.imageUri} alt={user.profile.name} />
                 </Avatar>
                 <div className="ml-3">
-                    <span className="font-semibold text-sm text-muted-foreground capitalize">
+                    <span className="font-semibold text-sm text-muted-foreground capitalize"> 
                         {user.profile.name}
                     </span>
                 </div>
             </div>
+            <SocketIndicator />
         </div>
     )
 }

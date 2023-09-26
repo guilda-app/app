@@ -5,15 +5,16 @@ import 'aos/dist/aos.css';
 
 import AOS from 'aos';
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 
 import { config as configurateDotEnv } from 'dotenv';
 import { useEffect } from "react";
 import { ModalProvider } from "@/components/providers/modal-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { SocketProvider } from "@/components/providers/socket-provider";
 
 configurateDotEnv();
-const inter = Inter({ subsets: ["latin"] });
+const inter = Open_Sans({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
@@ -28,8 +29,10 @@ export default function RootLayout({
     <html className="dark" lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning className={inter.className}>
         <TooltipProvider>
-          <ModalProvider />
-          {children}
+          <SocketProvider>
+            <ModalProvider />
+            {children}
+          </SocketProvider>
         </TooltipProvider>
       </body>
     </html>
