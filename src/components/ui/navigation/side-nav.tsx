@@ -26,12 +26,12 @@ export default function ({ user }: { user: FullUser }) {
     const params = useParams();
     const router = useRouter()
 
-    const onServerCreated = (server: Server) => {
-        refresh();
-        setSelectedServer(server);
-    }
-
     const openNewServerDialog = () => {
+        const onServerCreated = (server: Server) => {
+            refresh();
+            setSelectedServer(server);
+        }
+        
         onOpen("createServer", {
             profileId: user.profile.id,
             onCreated: onServerCreated,
@@ -44,6 +44,7 @@ export default function ({ user }: { user: FullUser }) {
         if (loadedList) {
             let { serverId } = params;
             if (serverId) {
+                console.log(servers)
                 let foundServer = servers.find((server) => server.id == serverId);
                 if (foundServer) {
                     setSelectedServer(foundServer);

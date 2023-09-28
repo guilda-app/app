@@ -37,7 +37,9 @@ export default function({ apiUrl, query, name }: {
                 url: apiUrl,
                 query,
             });
+            form.reset();
             await axios.post(url, values);
+            
         } catch (e) {
             console.error(e);
         }

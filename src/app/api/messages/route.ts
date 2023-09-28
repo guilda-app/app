@@ -34,7 +34,8 @@ export async function GET(req: any) {
                         include: {
                             profile: true
                         }
-                    }
+                    },
+                    embeds: true
                 },
                 orderBy: {
                     createdAt: "desc"
@@ -51,7 +52,8 @@ export async function GET(req: any) {
                         include: {
                             profile: true
                         }
-                    }
+                    },
+                    embeds: true
                 },
                 orderBy: {
                     createdAt: "desc"

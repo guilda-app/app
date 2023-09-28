@@ -1,14 +1,10 @@
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormMessage } from "@/components/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -27,10 +23,13 @@ import {
 } from "@/components/ui/select";
 import { Octagon, X } from "lucide-react";
 import { ChannelType } from "@/lib/channel";
+import updateServerInfo from "@/lib/update-server-info";
+import { Button } from "../ui/button";
+import { Icons } from "../icons";
 export default function CreateChannelDialog() {
     const { isOpen, onClose, modal, modalArgs } = useModal();
     const [isLoading, setIsLoading] = React.useState(false);
-    const { profileId, server, onCreated } = modalArgs;
+    const { profileId, server } = modalArgs;
     const FormSchema = z.object({
         name: z.string({
             description: "Channel name",
@@ -62,26 +61,29 @@ export default function CreateChannelDialog() {
                 channelType = ChannelType.text;
         }
         await createChannelInServer(server, name, channelType, profileId);
+        await updateServerInfo(server.id);
         handleClose();
     }
 
-    const handleClose = () => {
-        form.reset();
-        onClose();
+    const handleClose = (open: boolean = false) => {
+        if (!open) {
+            form.reset();
+            onClose();
+        }
     }
 
     return (
-        <AlertDialog open={isModalOpen} onOpenChange={handleClose}>
-            <AlertDialogContent>
+        <Dialog open={isModalOpen} onOpenChange={handleClose}>
+            <DialogContent>
                 <div className="absolute top-4 right-4">
-                    <X className="w-5 h-5 text-white cursor-pointer" onClick={handleClose} />
+                    <X className="w-5 h-5 text-white cursor-pointer" onClick={() => handleClose()} />
                 </div>
-                <AlertDialogHeader>
-                    <AlertDialogTitle>Create a new server! 🥳</AlertDialogTitle>
-                    <AlertDialogDescription>
+                <DialogHeader>
+                    <DialogTitle>Create a new server! 🥳</DialogTitle>
+                    <p>
                         Your server is where your friends hang out. Make yours and start talking!
-                    </AlertDialogDescription>
-                </AlertDialogHeader>
+                    </p>
+                </DialogHeader>
                 <Form {...form}>
                     <FormField
                         control={form.control}
@@ -130,10 +132,17 @@ export default function CreateChannelDialog() {
                         )}
                     />
                 </Form>
-                <AlertDialogFooter className="mt-2">
-                    <AlertDialogAction onClick={form.handleSubmit(onSubmit)}>Create Channel</AlertDialogAction>
-                </AlertDialogFooter>
-            </AlertDialogContent>
-        </AlertDialog>
+                <DialogFooter className="mt-2">
+                    <Button className="w-full" onClick={form.handleSubmit(onSubmit)}>
+                        {isLoading && (
+                            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                        ) || (
+                            <span className="mr-2">{"🥳"}</span>
+                        )}
+                        Create Channel
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     )
 }

@@ -4,6 +4,7 @@ import { NextApiResponseServerIO } from "@/lib/types";
 import getCurrentProfilePages from "@/lib/get-current-profile.pages";
 import { getChannelFromServer, getServerFromIdWithVerification } from "@/lib/servers";
 import { db } from "@/lib/db";
+import getEmbeds from "@/lib/get-embeds";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponseServerIO) {
     if (req.method != 'POST') return res.status(405).end();
@@ -26,19 +27,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
         const member = server.members.find(m => m.profileId == user.profile.id);
         if (!member) return res.status(403).end();
 
+        let embeds = await getEmbeds(content);
+
         const message = await db.message.create({
             data: {
                 content,
                 fileUrl,
                 memberId: member.id,
-                channelId: channel.id
+                channelId: channel.id,
+                embeds: {
+                    create: embeds
+                }
             },
             include: {
                 member: {
                     include: {
                         profile: true
                     }
-                }
+                },
+                embeds: true
             }
         });
 

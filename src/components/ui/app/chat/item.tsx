@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../../dropdown-menu";
+import MessageContent from "./message-content";
 
 export type MessageWithMemberAndProfile = Message & {
     member: Member & {
@@ -96,7 +97,7 @@ export default function ({
                     </div>
                     <p className={cn("text-sm text-zinc-300",
                         message.deleted && "italic && text-zinc-400 text-xs mt-1")}>
-                        {message.content}
+                        <MessageContent embeds={message.embeds} content={message.content} />
                     </p>
                     {/* TODO: images! */}
 

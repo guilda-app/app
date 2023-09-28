@@ -7,6 +7,7 @@ import { Skeleton } from "../../skeleton";
 import { Loader2, ServerCrash } from "lucide-react";
 import { Fragment } from "react";
 import ChatItem, { MessageWithMemberAndProfile } from "./item";
+import { useChatSocket } from "../../../../../hooks/use-chat-socket";
 
 export default function({
     name,
@@ -28,6 +29,8 @@ export default function({
     paramValue: string
 }) {
     const queryKey = `chat:${chatId}`;
+    const addKey = `chat:${chatId}:messages`;
+    const updateKey = `chat:${chatId}:message:update`;
     const {
         data,
         fetchNextPage,
@@ -39,6 +42,11 @@ export default function({
         apiUrl,
         paramKey,
         paramValue,
+    });
+    useChatSocket({
+        queryKey,
+        addKey,
+        updateKey,
     });
 
     if (status == "loading") {

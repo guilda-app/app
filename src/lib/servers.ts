@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ChannelType } from "./channel";
 import { MemberRole } from "./members";
 import { PopulatedServer } from "./types";
+import { FULL_SERVER_INCLUDES } from "./constants";
 
 export async function createNewServer({
     name,
@@ -37,8 +38,11 @@ export async function createNewServer({
                     profileId,
                     role: MemberRole.owner
                 }
-            }
+            },
         },
+        include: {
+            ...FULL_SERVER_INCLUDES
+        }
     });
     
     return server;
@@ -53,7 +57,7 @@ export async function getServerFromId(id: string, extraArgs = {}) {
     });
 }
 
-export async function getServerFromIdWithVerification(id: string, profileId: string): Promise<PopulatedServer | null> {
+export async function getServerFromIdWithVerification(id: string, profileId: string, includes = {}): Promise<PopulatedServer | null> {
     return await db.server.findFirst({
         where: {
             id,
@@ -64,7 +68,8 @@ export async function getServerFromIdWithVerification(id: string, profileId: str
             }
         },
         include: {
-            members: true
+            members: true,
+            ...includes
         }
     });
 }

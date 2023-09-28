@@ -134,9 +134,22 @@ model Message {
 
   deleted Boolean @default(false)
 
+  embeds MessageEmbed[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([memberId])
   @@index([channelId])
+}
+
+model MessageEmbed {
+  id String @id @default(uuid())
+  title String
+  description String?
+  url String
+  color String?
+  image String?
+
+  message Message @relation(fields: [id], references: [id], onDelete: Cascade)
 }

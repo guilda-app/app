@@ -24,7 +24,7 @@ export default function AuthenticationPage() {
   React.useEffect(() => {
     if (verificationId) {
       getActivationFromSlug(verificationId).then((activation) => {
-        if (activation) {
+        if (activation && activation.forCreation) {
           setEmail(activation.email);
         } else router.push("/register");
       })

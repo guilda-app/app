@@ -18,7 +18,8 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { createNewServer } from "@/lib/servers";
 import { useModal } from "../../../hooks/use-modal-store";
-import { CrossIcon, CrosshairIcon, X } from "lucide-react";
+import { X } from "lucide-react";
+import { Icons } from "../icons";
 
 export default function CreateServerDialog() {
     const { isOpen, onClose, modal, modalArgs } = useModal();
@@ -43,14 +44,16 @@ export default function CreateServerDialog() {
     }: { name: string }) => {
         setIsLoading(true);
         let server = await createNewServer({name, profileId});
+        onCreated?.(server);
         handleClose();
         setIsLoading(false);
-        onCreated?.(server);
     }
 
-    const handleClose = () => {
-        form.reset();
-        onClose();
+    const handleClose = (open: boolean = false) => {
+        if (!open) {
+            form.reset();
+            onClose();
+        }
     }
 
     return (
@@ -58,7 +61,7 @@ export default function CreateServerDialog() {
             <AlertDialogContent>
                 {canClose && (
                     <div className="absolute top-4 right-4">
-                        <X className="w-5 h-5 text-white cursor-pointer" onClick={handleClose} />
+                        <X className="w-5 h-5 text-white cursor-pointer" onClick={() => handleClose()} />
                     </div>
                 )}
                 <AlertDialogHeader>
@@ -93,7 +96,14 @@ export default function CreateServerDialog() {
                     />
                 </Form>
                 <AlertDialogFooter className="mt-2">
-                    <AlertDialogAction onClick={form.handleSubmit(onSubmit)}>Create server</AlertDialogAction>
+                    <AlertDialogAction className="w-full" onClick={form.handleSubmit(onSubmit)}>
+                        {isLoading && (
+                            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                        ) || (
+                            <span className="mr-2">{"🥳"}</span>
+                        )}
+                        Create server
+                    </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

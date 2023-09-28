@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import { FullUser, Server } from "@/lib/types";
 import { getProfileFromUser, getProfileServerList, getUserFromID } from "./profiles";
 import { getIDFromToken, getTokenFromCookies } from "@/lib/auth";
+import { useSocket } from "@/components/providers/socket-provider";
 
 export function useCurrentUser() {
   const [user, setUser] = useState<FullUser | null>(null);
@@ -44,17 +45,7 @@ export function useCurrentUser() {
 export function useUserServerList(user: FullUser | null) {
     const [list, setList ] = useState<Server[]>([]);
     const [loadedList, setLoadedList] = useState<boolean>(false);
-
-    useEffect(() => {
-        async function fetchList() {
-            if (user?.profile) {
-                let servers = await getProfileServerList(user.profile);
-                setList(servers);
-            }
-            setLoadedList(true);
-        }
-        fetchList();
-    }, [user]);
+    const { socket } = useSocket();
 
     const refresh = async () => {
         if (user?.profile) {
@@ -62,6 +53,34 @@ export function useUserServerList(user: FullUser | null) {
             setList(servers);
         }
     }
+
+    useEffect(() => {
+        async function fetchList() {
+            if (user?.profile) {
+                let servers = await getProfileServerList(user.profile);
+                setList(servers);
+                if (socket) {
+                    servers.forEach(server => {
+                        if ( socket._callbacks[`server:${server.id}:update`] == undefined ) {
+                            socket.on(`server:${server.id}:update`, (server: Server) => {
+                                setList(oldList => {
+                                    let newList = oldList.map(oldServer => {
+                                        if (oldServer.id === server.id) {
+                                            return server;
+                                        }
+                                        return oldServer;
+                                    });
+                                    return newList;
+                                });
+                            });
+                        }
+                    });
+                }
+            }
+            setLoadedList(true);
+        }
+        fetchList();
+    }, [user]);
 
     return { list, refresh, loadedList };
 }

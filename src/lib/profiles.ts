@@ -3,6 +3,7 @@
 import { db } from "@/lib/db";
 import { Profile } from "@prisma/client";
 import { Server } from "@/lib/types"
+import { FULL_SERVER_INCLUDES } from "./constants";
 
 export async function getVerificationCode(email: string, forCreation: boolean) {
   const code = await db.verificationCode.create({
@@ -98,9 +99,7 @@ export async function getProfileServerList(profile: Profile): Promise<Server[]> 
       }
     },
     include: {
-      invites: true,
-      channels: true,
-      members: true
+      ...FULL_SERVER_INCLUDES
     }
   });
 }
