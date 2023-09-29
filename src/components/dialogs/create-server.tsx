@@ -45,6 +45,7 @@ export default function CreateServerDialog() {
         setIsLoading(true);
         let server = await createNewServer({name, profileId});
         onCreated?.(server);
+        window.location.href = `/channels/${server.id}/${server.channels[0].id}`;
         handleClose();
         setIsLoading(false);
     }
