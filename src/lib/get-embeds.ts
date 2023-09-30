@@ -8,6 +8,7 @@ export default async function (message: string) {
 
     let embeds: MessageEmbed[] = [];
 
+    if (!links) return embeds;
     for (const link of links) {
         // check if link is an image
         const imageRegex = /https?:\/\/[^\s]+\.(png|jpg|jpeg|gif)/g;

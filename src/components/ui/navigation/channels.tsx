@@ -39,23 +39,30 @@ export default function ({
     const params = useSearchParams();
     const router = useRouter();
 
+    const openServerSettings = (e: any) => {
+        e.preventDefault();
+        onOpen("serverSettings", {
+            server
+        });
+    }
+
     return (
         <div className="mt-5">
             <div>
                 {isAdmin && (
-                    <div className="mb-1 relative flex items-center overflow-hidden text-muted-foreground cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1">
+                    <div onClick={openServerSettings} className="mb-1 select-none relative flex items-center overflow-hidden text-muted-foreground cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1">
                         <Settings className="mr-3 w-4 h-4" />
                         <div className="!p-0 truncate text-sm font-semibold">Server configuration</div>
                     </div>
                 )}
-                <div className="mb-1 relative flex items-center overflow-hidden text-muted-foreground cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1">
+                <div className="mb-1 relative flex items-center overflow-hidden select-none text-muted-foreground cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1">
                     <Search className="mr-3 w-4 h-4" />
                     <div className="!p-0 truncate text-sm font-semibold ">Search messages</div>
                     <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-black px-1.5 font-mono text-[10px] font-medium text-muted-foreground ml-auto"><span className="text-xs pt-0.5">⌘</span> + K</kbd>
                 </div>
                 <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <div className="mb-3 relative flex items-center overflow-hidden text-muted-foreground cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1">
+                    <div className="mb-3 relative flex items-center select-none overflow-hidden text-muted-foreground cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1">
                         <PlusIcon className="mr-3 w-4 h-4" />
                         <div className="!p-0 truncate text-sm font-semibold ">More actions</div>
                     </div>
@@ -139,7 +146,7 @@ export default function ({
                 <Separator className="mt-2 mb-2" />
                 <Section text="Server channels" className="mt-5" />
                 {server.channels?.map((channel) => (
-                    <div className="group relative flex items-center overflow-hidden cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1 text-muted-foreground" key={channel.id} onClick={() => {
+                    <div className="group select-none relative flex items-center overflow-hidden cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1 text-muted-foreground" key={channel.id} onClick={() => {
                         router.push(`/app/server/${server.id}/channel/${channel.id}`);
                     }}>
                         {channel.type == ChannelType.text ? (<HashIcon className="flex-shrink-0 w-5 h-5 text-zinc-500 dark:text-zinc-400 mr-3 w-4 h-4" />) : (<MegaphoneIcon className="flex-shrink-0 w-5 h-5 text-zinc-500 dark:text-zinc-400 mr-3 w-4 h-4" />)}
