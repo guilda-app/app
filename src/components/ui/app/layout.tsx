@@ -10,7 +10,7 @@ export default function AppLayout({
     return user ? (
         <div className='w-full relative h-full overflow-hidden flex'>
             <SideNav user={user} />
-            <div className='relative w-[calc(100%-300px)] h-full'>
+            <div className='relative w-[calc(100%-300px)] flex flex-col h-full'>
                 {children}
             </div>
         </div>

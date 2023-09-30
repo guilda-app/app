@@ -66,9 +66,11 @@ export default function({
     }
 
     return (
-        <div className="flex-1 flex flex-col py-4 pb-0 px-5 overflow-y-auto">
+        <div className="flex-1 pt-4 flex flex-col py-4 pb-0 mr-2 px-5 overflow-y-auto">
             <div className="flex-1" />
-            <ChatWelcome name={name} />
+            {!hasNextPage && (
+                <ChatWelcome name={name} />
+            )}
             <div className="flex flex-col-reverse mt-auto">
                 {data?.pages?.map((group: any, i: number) => (
                     <Fragment key={i}>

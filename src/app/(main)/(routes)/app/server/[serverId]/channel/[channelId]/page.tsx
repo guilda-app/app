@@ -2,11 +2,13 @@
 import { useCurrentUser } from "@/lib/authHooks";
 import { getChannelFromId, getServerMember } from "@/lib/servers";
 import { Channel, Member } from "@prisma/client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ChannelHeader from "@/components/ui/app/channels/header";
 import ChatInput from "@/components/ui/app/chat/chat-input";
 import Messages from "@/components/ui/app/chat/messages";
+import ServerUserList from "@/components/ui/navigation/user-list";
+import updateServerInfo from "@/lib/update-server-info";
 
 export default function ({
     params
@@ -19,10 +21,10 @@ export default function ({
     const [member, setMember] = useState<Member | null>(null);
 
     const router = useRouter();
+    const query = useSearchParams();
 
     useEffect(() => {
         async function render() {
-            console.log(user)
             if (!user) return;
             let channel = await getChannelFromId(channelId);
             let member = await getServerMember(serverId, user.profile.id);
@@ -33,34 +35,43 @@ export default function ({
 
             setChannel(channel);
             setMember(member);
+
+            if (query?.get("justJoined")) {
+                await updateServerInfo(serverId);
+            }
+
             setIsMounted(true);
         }
         render();
     }, [user]);
 
     return isMounted ? (
-        <div className="h-full flex flex-col">
-            <ChannelHeader channel={channel} />
-            <Messages 
-                member={member as Member}
-                name={channel?.name as string}
-                apiUrl="/api/messages"
-                socketUrl="/api/socket/messages"
-                socketQuery={{
-                    channelId: channel?.id as string,
-                    serverId: serverId,
-                }}
-                paramKey="channelId"
-                paramValue={channelId}
-            />
-            <ChatInput 
-                name={channel?.name as string}
-                apiUrl="/api/socket/messages"
-                query={{
-                    channelId: channel?.id as string,
-                    serverId: serverId,
-                }}
-            />
-        </div> 
+        <div className="w-full h-full relative flex">
+            <div className="h-full flex flex-col flex-1">
+                <ChannelHeader channel={channel} />
+                <Messages 
+                    member={member as Member}
+                    name={channel?.name as string}
+                    apiUrl="/api/messages"
+                    socketUrl="/api/socket/messages"
+                    chatId={channelId}
+                    socketQuery={{
+                        channelId: channel?.id as string,
+                        serverId: serverId,
+                    }}
+                    paramKey="channelId"
+                    paramValue={channelId}
+                />
+                <ChatInput 
+                    name={channel?.name as string}
+                    apiUrl="/api/socket/messages"
+                    query={{
+                        channelId: channel?.id as string,
+                        serverId: serverId,
+                    }}
+                />
+            </div> 
+            <ServerUserList serverId={serverId} />
+        </div>
     ) : null;
 }

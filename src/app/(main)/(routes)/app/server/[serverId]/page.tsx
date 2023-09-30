@@ -2,7 +2,7 @@
 
 import { getServerFromId } from "@/lib/servers";
 import { Server } from "@prisma/client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 export default function ({
@@ -10,6 +10,7 @@ export default function ({
 }: { params: { serverId: string }}) {
     let serverId = params.serverId;
     const router = useRouter();
+    const query = useSearchParams();
 
     useEffect(() => {
         async function render() {
@@ -23,7 +24,11 @@ export default function ({
             }
             let channel = server.channels[0];
             if (channel) {
-                router.push(`/app/server/${serverId}/channel/${channel.id}`);
+                let params = "";
+                if (query?.get("justJoined")) {
+                    params = "?justJoined=1";
+                }
+                router.push(`/app/server/${serverId}/channel/${channel.id}` + params);
             } 
         }
         render();

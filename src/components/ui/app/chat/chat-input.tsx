@@ -54,8 +54,8 @@ export default function({ apiUrl, query, name }: {
                     render={({ field }) => (
                         <FormItem>
                             <FormControl>
-                                <div className="relative p-4">
-                                    <button type="button" onClick={() => {}} className="absolute top-7 border ml-1 left-8 h-[24px] w-[24px] bg-zinc-900 hover:bg-zinc-800 transitipon rounded-full p-1 flex items-center justify-center">
+                                <div className="relative p-2 pb-6 pt-0 flex items-center">
+                                    <button style={{ transform: 'translateX(170%)' }} type="button" onClick={() => {}} className=" border ml-1 h-[24px] w-[24px] bg-zinc-900 hover:bg-zinc-800 transitipon rounded-full p-1 flex items-center justify-center">
                                         <PlusIcon className="w-5 h-5 text-white" />
                                     </button>
                                     <Input
@@ -65,7 +65,7 @@ export default function({ apiUrl, query, name }: {
                                         autoComplete="off"
                                         {...field}
                                     />
-                                    <div className="absolute top-1/2 right-8" style={{ transform: "translateY(-50%)"}}>
+                                    <div style={{ transform: 'translateX(-200%)' }}>
                                         <SmilePlus className="w-5 h-5 text-white cursor-pointer" />
                                     </div>
                                 </div>

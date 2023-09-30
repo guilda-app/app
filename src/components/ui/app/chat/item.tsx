@@ -64,7 +64,7 @@ export default function ({
     const canEditMessage = !message.deleted && isOwner;
 
     return (
-        <div className="relative group flex items-center hover:bg-black/5 p-4 transition w-full">
+        <div className="relative group flex items-start hover:bg-black/5 p-4 transition w-full">
             <div className="group flex gap-x-2 items-start w-full">
                 <div className="cursor-pointer hover:drop-shadow-md transition">
                     <Avatar>
@@ -97,7 +97,7 @@ export default function ({
                     </div>
                     <p className={cn("text-sm text-zinc-300",
                         message.deleted && "italic && text-zinc-400 text-xs mt-1")}>
-                        <MessageContent embeds={message.embeds} content={message.content} />
+                        <MessageContent embeds={(message as any).embeds} content={message.content} />
                     </p>
                     {/* TODO: images! */}
 
@@ -113,7 +113,7 @@ export default function ({
                         </ActionTooltip>
                     </div>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56">
+                <DropdownMenuContent className="w-56" style={{ transform: 'translateX(-40%)' }}>
                     {canEditMessage && (
                         <DropdownMenuGroup>
                             <DropdownMenuItem>

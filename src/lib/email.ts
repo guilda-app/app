@@ -1,6 +1,6 @@
 'use server';
 
-import WelcomeEmail from '@/emails/welcome';
+import WelcomeEmail from '@/lib/emails/welcome';
 import { EmailTemplate } from '@/lib/constants';
 import { Resend } from 'resend';
 

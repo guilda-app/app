@@ -93,6 +93,24 @@ body {
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
   }
+
+  .dark *::-webkit-scrollbar-track {
+    border-radius: 10px;
+    padding: 5px;
+    margin: 10px 5px;
+    @apply bg-zinc-900;
+  }
+  
+  .dark *::-webkit-scrollbar {
+    width: 6px;
+    margin: 5px 0;
+  }
+  
+  .dark *::-webkit-scrollbar-thumb {
+    @apply bg-zinc-800;
+    padding: 0 5px;
+    border-radius: 10px;
+  }
 }
 
 @layer base {

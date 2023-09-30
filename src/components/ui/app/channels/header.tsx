@@ -7,7 +7,7 @@ export default function ({
     channel
 }, { channel: Channel }) {
     return (
-        <div className="bg-zinc-950 w-full border-b shadow-md p-5 flex items-center select-none">
+        <div className="z-20 bg-zinc-950 w-full border-b shadow-md p-5 flex items-center select-none">
             <Hash className="w-5 h-5 text-muted ml-10" />
             <div className="ml-3">
                 <span className="font-semibold text-lg text-muted-foreground font-semibold">

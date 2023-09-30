@@ -1,7 +1,7 @@
 'use server';
 
 import { db } from "@/lib/db";
-import { Invite, Profile, Server } from "@prisma/client";
+import { Invite, Member, Profile, Server } from "@prisma/client";
 import { v4 as uuidv4 } from 'uuid';
 import { ChannelType } from "./channel";
 import { MemberRole } from "./members";
@@ -160,6 +160,30 @@ export async function getServerMember(serverId: string, profileId: string) {
         where: {
             serverId,
             profileId
+        }
+    });
+}
+
+export type ServerMember = Member & {
+    profile: Profile & {
+        user: {
+            id: string;
+            username: string;
+        }
+    }
+}
+
+export async function getServerMembers(serverId: string) {
+    return await db.member.findMany({
+        where: {
+            serverId
+        },
+        include: {
+            profile: {
+                include: {
+                    user: true
+                }
+            }
         }
     });
 }

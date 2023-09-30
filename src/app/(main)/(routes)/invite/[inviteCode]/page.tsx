@@ -15,6 +15,9 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useCurrentUser } from "@/lib/authHooks";
+import updateServerInfo from "@/lib/update-server-info";
+import { Icons } from "@/components/icons";
+import { DoorOpenIcon } from "lucide-react";
 
 export default function ({
     params
@@ -22,6 +25,7 @@ export default function ({
     const [invite, setInvite] = useState<Invite | null>(null);
     const [server, setServer] = useState<Server | null>(null);
     const [isMounted, setIsMounted] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const {user} = useCurrentUser();
     const {inviteCode} = params;
     useEffect(() => {
@@ -41,17 +45,18 @@ export default function ({
     });
 
     const joinServer = async (e: any) => {
+        setIsLoading(true);
         e.preventDefault();
         if (!invite) return;
         if (!user) return;
         
         await joinServerFromInvite(invite, user.profile);
-        window.location.href = `/app/server/${invite.serverId}`;
+        window.location.href = `/app/server/${invite.serverId}?justJoined=1`;
     }
 
     return isMounted ? invite ? (
         <div className="w-full h-full flex items-center justify-center">
-            <Card className="w-1/4 text-center">
+            <Card className="md:w-1/2 lg:w-1/4 text-center">
                 <CardHeader>
                     <Avatar className="mx-auto mb-2">
                         <AvatarImage src={server?.imageUri} />
@@ -61,14 +66,19 @@ export default function ({
                 </CardHeader>
                 <CardFooter>
                     <Button onClick={joinServer} className="w-full">
-                        🤟 Start a new adventure!
+                        {isLoading && (
+                            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                        ) || (
+                            <DoorOpenIcon className="mr-2 h-4 w-4" />
+                        )}
+                        Start a new adventure!
                     </Button>
                 </CardFooter>
             </Card>
         </div>
     ) : (
         <div className="w-full h-full flex items-center justify-center">
-            <Card className="w-1/4 text-center">
+            <Card className="md:w-1/2 lg:w-1/4 text-center">
                 <CardHeader>
                     <CardTitle>Whoops!</CardTitle>
                 </CardHeader>
