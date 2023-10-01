@@ -9,6 +9,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../../dropdown-menu";
 import MessageContent from "./message-content";
+import { getRoleName } from "@/lib/roles";
 
 export type MessageWithMemberAndProfile = Message & {
     member: Member & {
@@ -18,7 +19,7 @@ export type MessageWithMemberAndProfile = Message & {
 
 const TIMESTAMP_FORMAT = "d MMM yyyy, HH:mm";
 
-const roleIcons = {
+export const roleIcons = {
     "guest": null,
     "moderator": <ShieldCheck className="w-4 h-4 ml-2 text-indigo-500" />,
     "admin": <ShieldAlert className="w-4 h-4 ml-2 text-rose-500" />,
@@ -40,21 +41,7 @@ export default function ({
     const [isDeleting, setIsDeleting] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-    let roleName: string = "";
-    switch (message.member.role) {
-        case MemberRole.member:
-            roleName = "Guest";
-            break;
-        case MemberRole.moderator:
-            roleName = "Moderator";
-            break;
-        case MemberRole.admin:
-            roleName = "Admin";
-            break;
-        case MemberRole.owner:
-            roleName = "Owner";
-            break;
-    }
+    let roleName: string = getRoleName(currentMember.role);
 
     const hasBeenUpdated = message.createdAt !== message.updatedAt;
     const isAdmin = currentMember.role >= MemberRole.admin;

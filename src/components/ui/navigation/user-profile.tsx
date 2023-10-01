@@ -3,10 +3,25 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Settings } from "lucide-react";
 import { SocketIndicator } from "../socket-indicator";
+import { useSocket } from "@/components/providers/socket-provider";
+import { useEffect } from "react";
+import { db } from "@/lib/db";
+import { updateProfileInfo } from "@/lib/update-server-info";
+import { updateProfileStatus } from "@/lib/profiles";
 
 export default function ({
     user
 }: { user: FullUser }) {
+
+    const { isConnected } = useSocket();
+    useEffect(() => {
+        async function setUserStatus() {
+            await updateProfileStatus(user.profile, isConnected ? "online" : "offline");
+            await updateProfileInfo(user.profile.id);
+        }
+        setUserStatus();
+    }, [isConnected]);
+
     return (
         <div>
             <Separator className="my-2" />

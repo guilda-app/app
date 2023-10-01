@@ -160,6 +160,13 @@ export async function getServerMember(serverId: string, profileId: string) {
         where: {
             serverId,
             profileId
+        },
+        include: {
+            profile: {
+                include: {
+                    user: true
+                }
+            }
         }
     });
 }

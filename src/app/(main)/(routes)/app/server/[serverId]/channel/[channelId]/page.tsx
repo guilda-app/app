@@ -8,7 +8,7 @@ import ChannelHeader from "@/components/ui/app/channels/header";
 import ChatInput from "@/components/ui/app/chat/chat-input";
 import Messages from "@/components/ui/app/chat/messages";
 import ServerUserList from "@/components/ui/navigation/user-list";
-import updateServerInfo from "@/lib/update-server-info";
+import updateServerInfo, { updateServerMembers } from "@/lib/update-server-info";
 
 export default function ({
     params
@@ -37,7 +37,7 @@ export default function ({
             setMember(member);
 
             if (query?.get("justJoined")) {
-                await updateServerInfo(serverId);
+                await updateServerMembers(serverId);
             }
 
             setIsMounted(true);

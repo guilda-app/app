@@ -103,3 +103,14 @@ export async function getProfileServerList(profile: Profile): Promise<Server[]> 
     }
   });
 }
+
+export async function updateProfileStatus(profile: Profile, status: string) {
+  await db.profile.update({
+    where: {
+      id: profile.id
+    },
+    data: {
+      status
+    }
+  });
+}

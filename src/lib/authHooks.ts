@@ -4,6 +4,7 @@ import { FullUser, Server } from "@/lib/types";
 import { getProfileFromUser, getProfileServerList, getUserFromID } from "./profiles";
 import { getIDFromToken, getTokenFromCookies } from "@/lib/auth";
 import { useSocket } from "@/components/providers/socket-provider";
+import { SERVER_UPDATE } from "./socket";
 
 export function useCurrentUser() {
   const [user, setUser] = useState<FullUser | null>(null);
@@ -61,8 +62,8 @@ export function useUserServerList(user: FullUser | null) {
                 setList(servers);
                 if (socket) {
                     servers.forEach(server => {
-                        if ( socket._callbacks[`server:${server.id}:update`] == undefined ) {
-                            socket.on(`server:${server.id}:update`, (server: Server) => {
+                        if ( socket._callbacks[SERVER_UPDATE(server.id)] == undefined ) {
+                            socket.on(SERVER_UPDATE(server.id), (server: Server) => {
                                 setList(oldList => {
                                     let newList = oldList.map(oldServer => {
                                         if (oldServer.id === server.id) {
