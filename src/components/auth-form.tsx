@@ -30,6 +30,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import ConfettiExplosion from 'react-confetti-explosion';
 import { config as configurateDotEnv } from "dotenv";
+import LordIcon from "./ui/lord-icon";
 
 configurateDotEnv();
 
@@ -114,11 +115,11 @@ export function UserAuthForm({ className, isSignUp, ...props }: UserAuthFormProp
               </>
             )}
           />
-            <Button disabled={isLoading} data-aos="fade-right" data-aos-delay="300">
+            <Button className="login-btn" disabled={isLoading} data-aos="fade-right" data-aos-delay="300">
               {isLoading && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               ) || (
-                <Icons.email className="mr-2 h-4 w-4" />
+                <LordIcon className="mr-2" target=".login-btn" icon="diihvcfp" size={20} />
               )}
               {isSignUp ? "Sign Up" : "Sign In"} with Email
             </Button>

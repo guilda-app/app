@@ -11,6 +11,7 @@ import { createProfile, getActivationFromSlug, removeActivation } from "@/lib/pr
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { login } from "@/lib/auth";
+import LordIcon from "@/components/ui/lord-icon";
 
 export default function AuthenticationPage() {
   const router = useRouter();
@@ -104,11 +105,11 @@ export default function AuthenticationPage() {
                     data-aos="fade-right"
                     data-aos-delay="300"
                   />
-                  <Button className="mt-4" disabled={isLoading} data-aos="fade-up" data-aos-delay="400">
+                  <Button className="btn mt-4" disabled={isLoading} data-aos="fade-up" data-aos-delay="400">
                     {isLoading && (
                       <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                     ) || (
-                      <span className="mr-2">{"🥳"}</span>
+                      <LordIcon className="mr-2" target=".btn" icon="tyvtvbcy" size={20} />
                     )}
                     Create new account!
                   </Button>

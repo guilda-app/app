@@ -66,7 +66,7 @@ export default function({
     }
 
     return (
-        <div className="flex-1 pt-4 flex flex-col py-4 pb-0 mr-2 px-5 overflow-y-auto">
+        <div className="flex-1 pt-4 flex flex-col py-4 mr-2 px-5 overflow-y-auto">
             <div className="flex-1" />
             {!hasNextPage && (
                 <ChatWelcome name={name} />

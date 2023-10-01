@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { db } from "@/lib/db";
 import { updateProfileInfo } from "@/lib/update-server-info";
 import { updateProfileStatus } from "@/lib/profiles";
+import LordIcon from "../lord-icon";
 
 export default function ({
     user
@@ -25,8 +26,8 @@ export default function ({
     return (
         <div>
             <Separator className="my-2" />
-            <div className="flex items-center rounded-sm hover:bg-muted transition-all duration-150 p-2 cursor-pointer">
-                <Settings className="w-5 h-5" />
+            <div className="anim-icon flex items-center rounded-sm hover:bg-muted transition-all duration-150 p-2 cursor-pointer">
+                <LordIcon target=".anim-icon" icon="hwuyodym" className="w-5 h-5 mr-2" />
                 <div className="ml-3">
                     <span className="font-semibold text-sm text-muted-foreground">
                         Settings

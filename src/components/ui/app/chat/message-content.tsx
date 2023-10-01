@@ -31,20 +31,20 @@ export default function ({ content, embeds }: { content: string, embeds: Message
             }></div>
             {embeds?.map((embed, i) => {
                 return (
-                    <div key={i} className={cn(`border max-w-lg border-[${embeds}] rounded-lg p-4 mt-2`)}>
-                        <div className="flex flex-row items-center">
-                            <div className="flex flex-col flex-1">
+                    <div key={i} className={cn(`border max-w-md overflow-hidden border-[${embeds}] rounded-lg mt-2`)}>
+                        <div>
+                            {embed.image && (
+                                <div className="flex w-full flex-row items-center">
+                                    <img className="w-full" src={embed.image} />
+                                </div>
+                            )}
+                            <div className="flex flex-col flex-1 p-4">
                                 <a className="flex flex-row items-center" href={embed.url}>
                                     <h1 className="text-blue-400 font-bold text-sm">{embed.title}</h1>
                                 </a>
                                 {embed.description && (
-                                    <div className="flex flex-row mt-1 items-center">
+                                    <div className="flex flex-row mt-2 items-center">
                                         <p className="text-zinc-400 font-bold text-xs" dangerouslySetInnerHTML={{ __html: guildaMarkdown(escape(embed.description)) }}></p>
-                                    </div>
-                                )}
-                                {embed.image && (
-                                    <div className="flex flex-row mt-3 items-center">
-                                        <img className="rounded-lg" src={embed.image} />
                                     </div>
                                 )}
                             </div>

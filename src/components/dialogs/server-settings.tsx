@@ -8,6 +8,7 @@ import { Separator } from "../ui/separator";
 import { Textarea } from "../ui/textarea";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { cn } from "@/lib/utils";
+import LordIcon from "../ui/lord-icon";
 
 enum PageType {
     General,
@@ -43,10 +44,10 @@ export default function ServerSettingsDialog() {
                     <div className="border-r h-full pr-5 pt-8 w-60 pl-1 min-w-60">
                         <Section text="Basic configuration" />
                         <div onClick={() => setPage(PageType.General)} className={
-                            cn("mb-1 relative select-none flex items-center overflow-hidden text-muted-foreground cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1",
+                            cn("anim-icon mb-1 relative select-none flex items-center overflow-hidden text-muted-foreground cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1",
                                 page == PageType.General ? "bg-zinc-900" : ""
                             )}>
-                            <RouterIcon className="mr-3 w-4 h-4" />
+                            <LordIcon target=".anim-icon" icon="isugonwi" className="mr-3" size={20} />
                             <div className="!p-0 truncate text-sm font-semibold">Overview</div>
                         </div>
                     </div>

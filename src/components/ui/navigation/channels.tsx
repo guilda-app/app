@@ -23,6 +23,7 @@ import { useModal } from "../../../../hooks/use-modal-store";
 import { ActionTooltip } from "../action-tooltip";
 import { cn } from "@/lib/utils";
 import { useSearchParams, useRouter } from "next/navigation";
+import LordIcon from "../lord-icon";
 
 export default function ({
     server,
@@ -50,20 +51,20 @@ export default function ({
         <div className="mt-5">
             <div>
                 {isAdmin && (
-                    <div onClick={openServerSettings} className="mb-1 select-none relative flex items-center overflow-hidden text-muted-foreground cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1">
-                        <Settings className="mr-3 w-4 h-4" />
+                    <div onClick={openServerSettings} className="anim-icon mb-1 select-none relative flex items-center overflow-hidden text-muted-foreground cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1">
+                        <LordIcon target=".anim-icon" icon="hwuyodym" className="mr-3" size={20} />
                         <div className="!p-0 truncate text-sm font-semibold">Server configuration</div>
                     </div>
                 )}
-                <div className="mb-1 relative flex items-center overflow-hidden select-none text-muted-foreground cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1">
-                    <Search className="mr-3 w-4 h-4" />
+                <div className="anim-icon mb-1 relative flex items-center overflow-hidden select-none text-muted-foreground cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1">
+                    <LordIcon target=".anim-icon" icon="xfftupfv" className="mr-3" size={20} />
                     <div className="!p-0 truncate text-sm font-semibold ">Search messages</div>
                     <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-black px-1.5 font-mono text-[10px] font-medium text-muted-foreground ml-auto"><span className="text-xs pt-0.5">⌘</span> + K</kbd>
                 </div>
                 <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <div className="mb-3 relative flex items-center select-none overflow-hidden text-muted-foreground cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1">
-                        <PlusIcon className="mr-3 w-4 h-4" />
+                    <div className="anim-icon mb-3 relative flex items-center select-none overflow-hidden text-muted-foreground cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1">
+                        <LordIcon target=".anim-icon" icon="rxufjlal" className="mr-3" size={20} />
                         <div className="!p-0 truncate text-sm font-semibold ">More actions</div>
                     </div>
                 </DropdownMenuTrigger>
@@ -73,7 +74,7 @@ export default function ({
                     {isModerator && (
                         <>
                             <DropdownMenuGroup>
-                                <DropdownMenuItem onClick={(
+                                <DropdownMenuItem className="anim-icon" onClick={(
                                     () => {
                                         onOpen("createChannel", {
                                             profileId: user.profile.id,
@@ -84,7 +85,7 @@ export default function ({
                                         });
                                     }
                                 )}>
-                                    <PlusCircleIcon className="mr-2 h-4 w-4" />
+                                    <LordIcon target=".anim-icon" icon="hpivxauj" className="mr-2" size={20} />
                                     <span>Create new channel</span>
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>
@@ -92,23 +93,23 @@ export default function ({
                     )}
                     <DropdownMenuGroup>
                     <DropdownMenuSub>
-                        <DropdownMenuSubTrigger>
-                        <UserPlus className="mr-2 h-4 w-4" />
-                        <span>Invite users</span>
+                        <DropdownMenuSubTrigger className="anim-icon">
+                            <LordIcon target=".anim-icon" icon="uiakkykh" className="mr-2" size={20} />
+                            <span>Invite users</span>
                         </DropdownMenuSubTrigger>
                         <DropdownMenuPortal>
                         <DropdownMenuSubContent>
                             {serverInvites?.map((invite) => (
-                                <DropdownMenuItem onClick={() => {
+                                <DropdownMenuItem className="anim-icon" onClick={() => {
                                     navigator.clipboard.writeText(`${window.location.origin}/invite/${invite.code}`)
                                 }}>
-                                    <Link className="mr-2 h-4 w-4" />
+                                    <LordIcon target=".anim-icon" icon="wxhtpnnk" className="mr-2" size={20} />
                                     <span>invite with code "{invite.code}"</span>
                                 </DropdownMenuItem>
                             ))}
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>
-                            <PlusCircle className="mr-2 h-4 w-4" />
+                            <DropdownMenuItem className="anim-icon">
+                                <LordIcon target=".anim-icon" icon="ynwbvguu" className="mr-2" size={20} />
                                 <span>Create new invite</span>
                             </DropdownMenuItem>
                         </DropdownMenuSubContent>
@@ -119,8 +120,8 @@ export default function ({
                         <>
                             <DropdownMenuSeparator />
                             <DropdownMenuGroup>
-                                <DropdownMenuItem>
-                                    <User className="mr-2 h-4 w-4" />
+                                <DropdownMenuItem className="anim-icon">
+                                    <LordIcon target=".anim-icon" icon="kulwmpzs" className="mr-2" size={20} />
                                     <span>Manage members</span>
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>
@@ -130,12 +131,12 @@ export default function ({
                         <>
                             <DropdownMenuSeparator />
                             <DropdownMenuGroup>
-                                <DropdownMenuItem className="text-red-500">
+                                <DropdownMenuItem className="anim-icon text-red-500">
                                     <DoorClosedIcon className="mr-2 h-4 w-4" />
                                     <span>Leave server</span>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="text-red-500">
-                                    <Mail className="mr-2 h-4 w-4" />
+                                <DropdownMenuItem className="anim-icon text-red-500">
+                                    <LordIcon target=".anim-icon" icon="wdqztrtx" className="mr-2" size={20} />
                                     <span>Report server</span>
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>

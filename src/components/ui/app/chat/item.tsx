@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../../dropdown-menu";
 import MessageContent from "./message-content";
 import { getRoleName } from "@/lib/roles";
+import LordIcon from "../../lord-icon";
 
 export type MessageWithMemberAndProfile = Message & {
     member: Member & {
@@ -92,11 +93,16 @@ export default function ({
             </div>
             <DropdownMenu onOpenChange={(open) => setIsDropdownOpen(open)}>
                 <DropdownMenuTrigger asChild>
-                    <div className={cn(
+                    <div className={cn("anim-icon",
                         isDropdownOpen ? "flex" : "hidden group-hover:flex",
                     )}>
                         <ActionTooltip label="More actions" side="top">
-                            <ChevronDown className="cursor-pointer w-6 h-6 p-1 rounded-sm bg-zinc-900 border ml-2 text-zinc-200 group-hover:text-zinc-500 transition" />
+                            <div style={{
+                                width: '27px',
+                                height: '27px',
+                            }} className="flex items-center justify-center cursor-pointer rounded-sm mt-2 bg-zinc-900 border ml-2 text-zinc-200 group-hover:text-zinc-500 transition">
+                                <LordIcon target=".anim-icon" icon="rxufjlal" size={18} className="m-0" />
+                            </div>
                         </ActionTooltip>
                     </div>
                 </DropdownMenuTrigger>
@@ -119,8 +125,8 @@ export default function ({
                         <>
                             <DropdownMenuSeparator />
                             <DropdownMenuGroup>
-                                <DropdownMenuItem className="text-red-600">
-                                    <Trash2Icon className="mr-2 h-4 w-4" />
+                                <DropdownMenuItem className="anim-icon text-red-600">
+                                    <LordIcon target=".anim-icon" icon="kfzfxczd" className="mr-2" size={20} />
                                     <span>Delete message</span>
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>

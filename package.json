@@ -37,6 +37,8 @@
     "eslint-config-next": "13.4.12",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^8.5.1",
+    "lord-icon-element": "^4.1.1",
+    "lottie-web": "^5.12.2",
     "lucide-react": "^0.277.0",
     "next": "13.4.12",
     "next-app-session": "^1.0.3",

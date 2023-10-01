@@ -20,6 +20,7 @@ import { createNewServer } from "@/lib/servers";
 import { useModal } from "../../../hooks/use-modal-store";
 import { X } from "lucide-react";
 import { Icons } from "../icons";
+import LordIcon from "../ui/lord-icon";
 
 export default function CreateServerDialog() {
     const { isOpen, onClose, modal, modalArgs } = useModal();
@@ -97,11 +98,11 @@ export default function CreateServerDialog() {
                     />
                 </Form>
                 <AlertDialogFooter className="mt-2">
-                    <AlertDialogAction className="w-full" onClick={form.handleSubmit(onSubmit)}>
+                    <AlertDialogAction className="create-server-btn w-full" onClick={form.handleSubmit(onSubmit)}>
                         {isLoading && (
                             <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                         ) || (
-                            <span className="mr-2">{"🥳"}</span>
+                            <LordIcon className="mr-2" target=".create-server-btn" icon="hpivxauj" size={20} />
                         )}
                         Create server
                     </AlertDialogAction>
