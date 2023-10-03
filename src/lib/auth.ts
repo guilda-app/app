@@ -1,4 +1,5 @@
 import Cookies from "js-cookie";
+import { parse as parseCookies } from "cookie";
 import jwt from "jsonwebtoken";
 
 type UserDetails = {
@@ -17,17 +18,23 @@ export async function logout() {
     Cookies.remove("currentUser");
 }
 
-export async function getTokenFromCookies(cookies: any, fromPages: boolean = false) {
+export async function getTokenFromCookies(cookies: any, fromPages: boolean = false, fromSocket: boolean = false) {
     let token = null as string | null;
     try {
         if (fromPages) {
             token = JSON.parse(cookies["currentUser"])["accessToken"];
+        } else if (fromSocket) {
+            token = JSON.parse(parseCookies(cookies)["currentUser"])["accessToken"];   
         } else if (cookies.get("currentUser")?.value) {
             token = JSON.parse(cookies.get("currentUser")?.value)["accessToken"];;
         } else {
             token = JSON.parse(cookies.get("currentUser"))["accessToken"];
         }
-    } catch(e) {/*console.error("[FETCH_TOKEN]", `(pages: ${fromPages})`, e)*/}
+    } catch(e) {
+        if (false) {
+            console.error("[FETCH_TOKEN]", `(pages: ${fromPages})`, e)
+        }
+    }
     return token;
 }
 

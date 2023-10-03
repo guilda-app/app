@@ -4,7 +4,7 @@ import { Separator } from "../../separator";
 export default function ({ name }: { name: string}) {
     return (
         <div className="space-y-2 px-4 mb-8">
-            <div className="h-[75px] w-[75px] rounded-lg bg-zinc-900 border shadow mb-1 flex items-center justify-center">
+            <div className="h-[75px] w-[75px] rounded-lg bg-zinc-900 border shadow mb-2 flex items-center justify-center">
                 <HashIcon className="w-12 h-12 text-white" />
             </div>
             <p className="text-xl md:text-3xl font-bold">

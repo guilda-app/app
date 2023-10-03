@@ -1,10 +1,13 @@
+"use client";
 import React from 'react'
 import lottie from 'lottie-web';
 import {defineElement as defineLordIconElement} from 'lord-icon-element';
 import { cn } from '@/lib/utils';
 
-// register lottie and define custom element
-defineLordIconElement(lottie.loadAnimation);
+if (typeof document !== 'undefined') {
+  // register lottie and define custom element
+  defineLordIconElement(lottie.loadAnimation);
+}
 
 export type LordiconTrigger =
   | 'hover'

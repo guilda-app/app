@@ -114,3 +114,28 @@ export async function updateProfileStatus(profile: Profile, status: string) {
     }
   });
 }
+
+export async function disconnectProfile(profile: Profile) {
+  await db.profile.update({
+    where: {
+      id: profile.id
+    },
+    data: {
+      status: profile.connectedSockets > 1 ? profile.status : "offline",
+      connectedSockets: profile.connectedSockets <= 1 ? 0 : profile.connectedSockets - 1
+    }
+  });
+}
+
+export async function connectProfile(profile: Profile) {
+  await db.profile.update({
+    where: {
+      id: profile.id
+    },
+    data: {
+      status: "online",
+      connectedSockets: profile.connectedSockets + 1
+    }
+  });
+}
+

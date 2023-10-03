@@ -4,8 +4,8 @@ import { getIDFromToken, getTokenFromCookies } from "./auth";
 import { getProfileFromUser, getUserFromID } from "./profiles";
 import { FullUser } from "./types";
 
-export default async function(request: NextApiRequest, fromPages: boolean = false) {
-    let token = await getTokenFromCookies(request.cookies, fromPages);
+export default async function(request: NextApiRequest, fromPages: boolean = false, fromSocket: boolean = false) {
+    let token = await getTokenFromCookies(fromSocket ? (request as any).cookie : request.cookies, fromPages, fromSocket);
     if (!token) return null;
 
     let id = getIDFromToken(token);

@@ -12,6 +12,7 @@ import { ModalProvider } from "@/components/providers/modal-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SocketProvider } from "@/components/providers/socket-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 configurateDotEnv();
 const inter = Open_Sans({ subsets: ["latin"] });
@@ -31,6 +32,7 @@ export default function RootLayout({
         <TooltipProvider>
           <SocketProvider>
             <ModalProvider />
+            <Toaster />
             <QueryProvider >
               {children}
             </QueryProvider>

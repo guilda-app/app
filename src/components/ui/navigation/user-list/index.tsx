@@ -1,10 +1,14 @@
-import { ServerMember, getServerMember, getServerMembers } from "@/lib/servers";
+import { ServerMember, getServerFromId, getServerMember, getServerMembers } from "@/lib/servers";
 import { Member, Server } from "@prisma/client";
 import { useEffect, useState } from "react";
 import Section from "../section";
 import NavigationUser from "./user";
 import { useSocket } from "@/components/providers/socket-provider";
-import { SERVER_MEMBERS_UPDATE } from "@/lib/socket";
+import { PROFILE_UPDATE, SERVER_MEMBERS_UPDATE } from "@/lib/socket";
+import { useUserServer } from "@/lib/authHooks";
+import { Separator } from "@/components/ui/separator";
+import { Avatar } from "../../avatar";
+import { AvatarImage } from "@radix-ui/react-avatar";
 
 export default function ServerUserList({
     serverId,
@@ -14,6 +18,7 @@ export default function ServerUserList({
     const [isMounted, setIsMounted] = useState(false);
 
     const {socket} = useSocket();
+    const server = useUserServer(serverId) as Server;
     
     useEffect(() => {
         if (!socket) return;
@@ -31,8 +36,7 @@ export default function ServerUserList({
             });
 
             for (let member of members) {
-                socket.on(`profile:${member.profile.id}:update`, async (profile: Member) => {
-                    console.log("profile update")
+                socket.on(PROFILE_UPDATE(member.profile.id), async (profile: Member) => {
                     let member = await getServerMember(serverId, profile.id) as ServerMember;
                     if (!member) return;
                     setServerMembers((members) => {
@@ -56,7 +60,22 @@ export default function ServerUserList({
     }
 
     return isMounted ? (
-        <div className="flex flex-col p-5 w-[300px] z-0 pl-7 pt-6 border-l bg-zinc-950">
+        <div className="flex flex-col p-5 w-[300px] z-0 pl-7 select-none pt-6 border-l bg-zinc-950">
+            <div className="flex flex-col mt-2">
+                <div className="flex items-center">
+                    <Avatar className="mr-5">
+                        <AvatarImage src={server.imageUri} />
+                    </Avatar>
+                    <div>
+                        <h1 className="text-xl font-bold">{server.name}</h1>
+                        <p className="mt-1 text-xs font-bold text-green-400">{serverMembers.length} {serverMembers.length == 1 ? "member" : "members"}</p>
+                    </div>
+                </div>
+                {server.description?.length > 0 && (
+                    <p className="text-sm font-semibold text-muted-foreground opacity-80 mt-4">{server.description}</p>
+                )}
+                <Separator className="my-6" />
+            </div>
             {onlineMembers.length > 0 && (
                 <div className="mb-5">
                     <Section text={`Online Members - ${onlineMembers.length}`} />

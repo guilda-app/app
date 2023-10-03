@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useModal } from "../../../hooks/use-modal-store";
-import { RouterIcon, X } from "lucide-react";
+import { Loader2Icon, RouterIcon, X } from "lucide-react";
 import { Dialog, DialogContent } from "../ui/dialog";
 import Section from "../ui/navigation/section";
 import { Input } from "../ui/input";
@@ -9,6 +9,13 @@ import { Textarea } from "../ui/textarea";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { cn } from "@/lib/utils";
 import LordIcon from "../ui/lord-icon";
+import { Button } from "../ui/button";
+import { Server } from "@prisma/client";
+import { AlertDialog, AlertDialogContent } from "../ui/alert-dialog";
+import { useToast } from "../ui/use-toast";
+import { db } from "@/lib/db";
+import updateServerInfo from "@/lib/update-server-info";
+import { updateServerSettings } from "@/lib/servers";
 
 enum PageType {
     General,
@@ -20,28 +27,52 @@ export default function ServerSettingsDialog() {
     const [page, setPage] = React.useState<PageType>(PageType.General);
     const { server } = modalArgs;
     const isModalOpen = isOpen && modal == "serverSettings";
-    
+    const [serverCopy, setServerCopy] = React.useState<Server | null>(server);
+    const [doNotExitAsClass, setdoNotExitAsClass] = React.useState(false);
+    const needsSaving = JSON.stringify(serverCopy) !== JSON.stringify(server);
+    const { toast } = useToast();
+
     const onSubmit = async () => {
         setIsLoading(true);
+
+        await updateServerSettings(server.id, serverCopy as Server);
+        await updateServerInfo(server.id);
         
-        //handleClose();
-        //setIsLoading(false);
+        setdoNotExitAsClass(false);
+        handleClose(false, true);
+        setIsLoading(false);
+        toast({
+            title: "Server settings saved!",
+            description: "Your server settings have been saved.",
+        });
     }
 
-    const handleClose = (open: boolean = false) => {
+    const handleClose = (open: boolean = false, forCancel: boolean = false) => {
         if (!open) {
-            onClose();
+            if (needsSaving && !forCancel) {
+                setTimeout(() => {
+                    if (!doNotExitAsClass)
+                        setdoNotExitAsClass(false);
+                }, 400);
+                setdoNotExitAsClass(true);
+            } else {
+                onClose();
+            }
         }
     }
 
+    useEffect(() => {
+        setServerCopy(server);
+    }, [server]);
+
     return server ? (
-        <Dialog open={isModalOpen} onOpenChange={handleClose}>
-            <DialogContent className="!w-3/6 h-4/5 max-w-none max-h-none flex">
+        <AlertDialog open={isModalOpen} onOpenChange={handleClose}>
+            <AlertDialogContent className="!w-3/6 h-4/5 max-w-none max-h-none flex">
                 <div className="absolute top-4 right-4">
                     <X className="w-5 h-5 text-white cursor-pointer" onClick={() => handleClose()} />
                 </div>
                 <div className="flex w-full">
-                    <div className="border-r h-full pr-5 pt-8 w-60 pl-1 min-w-60">
+                    <div className="border-r flex flex-col h-full pr-5 pt-8 w-60 pl-1 min-w-60">
                         <Section text="Basic configuration" />
                         <div onClick={() => setPage(PageType.General)} className={
                             cn("anim-icon mb-1 relative select-none flex items-center overflow-hidden text-muted-foreground cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1",
@@ -49,6 +80,28 @@ export default function ServerSettingsDialog() {
                             )}>
                             <LordIcon target=".anim-icon" icon="isugonwi" className="mr-3" size={20} />
                             <div className="!p-0 truncate text-sm font-semibold">Overview</div>
+                        </div>
+                        <div className="w-full flex-1 pt-4 flex items-end justify-end">
+                            <Button variant={"ghost"} onClick={() => handleClose(false, true)} className="mr-2">Cancel</Button>
+                            <Button onClick={onSubmit} disabled={!needsSaving} className={cn("anim-icon ml-2 w-full", doNotExitAsClass ? "they-are-trying-to-scape-without-saving-👹" : "")}>
+                                {isLoading && (
+                                    <div className="flex flex-row items-center">
+                                        <div className="mr-2">
+                                            <Loader2Icon className="h-4 w-4 animate-spin" />
+                                        </div>
+                                        <div>
+                                            Saving...
+                                        </div>
+                                    </div>
+                                ) || (
+                                    <div className="flex flex-row items-center">
+                                        <LordIcon target=".anim-icon" icon="ndppaqfb" className="mr-2" size={24} />
+                                        <div>
+                                            Save
+                                        </div>
+                                    </div>
+                                )}
+                            </Button>
                         </div>
                     </div>
                     <div className="ml-12 mt-8 flex-1 pr-12 relative overflow-auto">
@@ -77,6 +130,12 @@ export default function ServerSettingsDialog() {
                                             name="name"
                                             placeholder="Server name"
                                             defaultValue={server.name}
+                                            onInput={(e) => {
+                                                setServerCopy((prevState: any) => {return {
+                                                    ...prevState,
+                                                    name: e.target.value
+                                                } as Server});
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -123,6 +182,12 @@ export default function ServerSettingsDialog() {
                                             name="description"
                                             placeholder="Server description"
                                             defaultValue={server.description}
+                                            onInput={(e) => {
+                                                setServerCopy((prevState: any) => {return {
+                                                    ...prevState,
+                                                    description: e.target.value
+                                                } as Server});
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -130,7 +195,7 @@ export default function ServerSettingsDialog() {
                         )}
                     </div>
                 </div>
-            </DialogContent>
-        </Dialog>
+            </AlertDialogContent>
+        </AlertDialog>
     ) : null;
 }

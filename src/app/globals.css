@@ -120,5 +120,20 @@ body {
   body {
     @apply bg-background text-foreground;
   }
-}
 
+  .they-are-trying-to-scape-without-saving-👹 {
+    transition: all 0.1s ease-in-out;
+    animation: button-error-shake 0.4s ease-in-out;
+  }
+
+  @keyframes button-error-shake {
+    0% { background: #da2828; color: white; transform: translate(16px); }
+    20% { background: #da2828; color: white; transform: translate(-16px); }
+    40% { background: #da2828; color: white; transform: translate(8px); }
+    60% { background: #da2828; color: white; transform: translate(-8px); }
+    80% { background: #da2828; color: white; transform: translate(4px); }
+    100% {
+      transform: translateX(0);
+    }
+  }
+}

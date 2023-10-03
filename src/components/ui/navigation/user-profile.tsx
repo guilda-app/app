@@ -7,7 +7,7 @@ import { useSocket } from "@/components/providers/socket-provider";
 import { useEffect } from "react";
 import { db } from "@/lib/db";
 import { updateProfileInfo } from "@/lib/update-server-info";
-import { updateProfileStatus } from "@/lib/profiles";
+import { connectProfile, disconnectProfile, updateProfileStatus } from "@/lib/profiles";
 import LordIcon from "../lord-icon";
 
 export default function ({
@@ -17,7 +17,11 @@ export default function ({
     const { isConnected } = useSocket();
     useEffect(() => {
         async function setUserStatus() {
-            await updateProfileStatus(user.profile, isConnected ? "online" : "offline");
+            if (isConnected) {
+                await connectProfile(user.profile);
+            } else {
+                await disconnectProfile(user.profile);
+            }
             await updateProfileInfo(user.profile.id);
         }
         setUserStatus();

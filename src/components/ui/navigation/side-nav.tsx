@@ -44,7 +44,6 @@ export default function ({ user }: { user: FullUser }) {
         if (loadedList) {
             let { serverId } = params;
             if (serverId) {
-                console.log(servers)
                 let foundServer = servers.find((server) => server.id == serverId);
                 if (foundServer) {
                     setSelectedServer(foundServer);

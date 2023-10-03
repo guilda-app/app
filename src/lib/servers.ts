@@ -194,3 +194,16 @@ export async function getServerMembers(serverId: string) {
         }
     });
 }
+
+export async function updateServerSettings(serverId: string, settings: Partial<Server>) {
+    return await db.server.update({
+        where: {
+            id: serverId,
+        },
+        data: {
+            name: settings.name,
+            imageUri: settings.imageUri,
+            description: settings.description,
+        }
+    });
+}
