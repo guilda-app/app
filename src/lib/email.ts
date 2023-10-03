@@ -2,13 +2,13 @@
 
 import WelcomeEmail from '@/lib/emails/welcome';
 import { EmailTemplate } from '@/lib/constants';
-import { Resend } from 'resend';
+import Plunk from '@plunk/node';
 
 declare global {
-    var emailClient: Resend | undefined
+    var emailClient: Plunk | undefined
 }
 
-const emailClient = globalThis.emailClient || new Resend(process.env.RESEND_KEY as string)
+const emailClient = globalThis.emailClient || new Plunk(process.env.PLUNK_KEY as string)
 
 if (process.env.NODE_ENV === 'development') {
     globalThis.emailClient = emailClient
@@ -26,10 +26,9 @@ export async function sendEmail({
     switch (template) {
         case EmailTemplate.AccountConfirmation:
             return emailClient.emails.send({
-                from: process.env.EMAiL_FROM as string,
                 to,
                 subject: 'Welcome to guilda!',
-                html: WelcomeEmail(to, args),
+                body: WelcomeEmail(to, args),
             });
     }
 }
