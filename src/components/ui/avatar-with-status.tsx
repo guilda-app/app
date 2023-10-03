@@ -1,5 +1,4 @@
-import { AvatarImage } from "@radix-ui/react-avatar";
-import { Avatar } from "./avatar";
+import { Avatar, AvatarImage } from "./avatar";
 import { MinusCircle, MoonIcon } from "lucide-react";
 
 const statusIcons = {
@@ -21,7 +20,7 @@ export default function ({
     return (
         <div className="relative">
             {statusIcons[status] || null}
-            <Avatar className={`w-6 h-6 relative ${className}`} {...props}>
+            <Avatar className={`w-8 h-8 relative ${className}`} {...props}>
                 <AvatarImage src={src} alt="Avatar" />
             </Avatar>
         </div>

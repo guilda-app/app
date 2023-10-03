@@ -7,8 +7,7 @@ import { useSocket } from "@/components/providers/socket-provider";
 import { PROFILE_UPDATE, SERVER_MEMBERS_UPDATE } from "@/lib/socket";
 import { useUserServer } from "@/lib/authHooks";
 import { Separator } from "@/components/ui/separator";
-import { Avatar } from "../../avatar";
-import { AvatarImage } from "@radix-ui/react-avatar";
+import { Avatar, AvatarImage } from "../../avatar";
 
 export default function ServerUserList({
     serverId,
@@ -67,7 +66,7 @@ export default function ServerUserList({
                         <AvatarImage src={server.imageUri} />
                     </Avatar>
                     <div>
-                        <h1 className="text-xl font-bold">{server.name}</h1>
+                        <h1 style={{ lineHeight: '1' }} className="text-xl font-bold">{server.name}</h1>
                         <p className="mt-1 text-xs font-bold text-green-400">{serverMembers.length} {serverMembers.length == 1 ? "member" : "members"}</p>
                     </div>
                 </div>

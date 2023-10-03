@@ -11,7 +11,6 @@ import {
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { ChevronsUpDown, PlusCircleIcon, SearchIcon, Users2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,6 +21,7 @@ import UserProfile from "./user-profile";
 export default function ({ user }: { user: FullUser }) {
     let { list: servers, refresh, loadedList } = useUserServerList(user);
     let [selectedServer, setSelectedServer] = useState<Server | null>(null);
+    const [serverListOpen, setServerListOpen] = useState(false);
     const { onOpen } = useModal();
     const params = useParams();
     const router = useRouter()
@@ -71,14 +71,14 @@ export default function ({ user }: { user: FullUser }) {
     return loadedList ? (
         <div className="p-5 flex flex-col space-between relative border-r w-[300px] bg-zinc-950 shadow-inner h-full justify-between">
             <div>
-                <Popover>
+                <Popover open={serverListOpen} onOpenChange={setServerListOpen}>
                     <PopoverTrigger className="w-full">
                         <Button
                             variant="outline"
                             role="combobox"
-                            className="w-full mt-5"
+                            className="w-full mt-5 pl-2"
                         >
-                            <Avatar className="mr-3 w-4 h-4">
+                            <Avatar className="mr-3 w-6 h-6 rounded-full">
                                 <AvatarImage src={selectedServer?.imageUri} />
                             </Avatar>
                             {selectedServer?.name ?? "Select a server"}
@@ -93,14 +93,17 @@ export default function ({ user }: { user: FullUser }) {
                             <Input placeholder="Search servers..." id="search-servers" className="w-full border-none !ring-0 !outline-none !rounded-none !p-0 !ring-offset-0" />
                         </div>
                         {servers.map((server) => (
-                            <div key={server.id} className="mb-1 w-full items-center flex relative rounded-md hover:bg-zinc-900 trnaistion-all duration-150 cursor-pointer py-2 px-3" onClick={() => setSelectedServer(server)}>
+                            <div key={server.id} className="mb-1 w-full items-center flex relative rounded-md hover:bg-zinc-900 trnaistion-all duration-150 cursor-pointer py-2 px-3 pl-3" onClick={() => {
+                                setSelectedServer(server)
+                                setServerListOpen(false);
+                            }}>
                                 {server.id == selectedServer?.id && (
                                     <div className="absolute inset-y-0 rounded-br rounded-tr left-0 w-[2px] left-[-3px] bg-white opacity-90"></div>
                                 )}
-                                <Avatar className="w-5 h-5 bg-zinc-900">
+                                <Avatar className="w-6 h-6 bg-zinc-900 rounded-full">
                                     <AvatarImage src={server.imageUri} />
                                 </Avatar>
-                                <span className="ml-4 text-sm font-semibold overflow-hidden w-full">
+                                <span className="ml-3 text-sm font-semibold overflow-hidden w-full">
                                     {server.name}
                                 </span>
                             </div>

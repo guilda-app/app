@@ -5,9 +5,10 @@ import { Member } from "@prisma/client";
 import { useChatQuery } from "../../../../../hooks/use-chat-query";
 import { Skeleton } from "../../skeleton";
 import { Loader2, ServerCrash } from "lucide-react";
-import { Fragment } from "react";
+import { ElementRef, Fragment, useRef } from "react";
 import ChatItem, { MessageWithMemberAndProfile } from "./item";
 import { useChatSocket } from "../../../../../hooks/use-chat-socket";
+import { useChatScroll } from "../../../../../hooks/use-chat-scroll";
 
 export default function({
     name,
@@ -28,6 +29,10 @@ export default function({
     paramKey: "channelId",
     paramValue: string
 }) {
+
+    const chatRef = useRef<ElementRef<"div">>(null);
+    const bottomRef = useRef<ElementRef<"div">>(null);
+
     const queryKey = `chat:${chatId}`;
     const addKey = `chat:${chatId}:messages`;
     const updateKey = `chat:${chatId}:message:update`;
@@ -48,6 +53,13 @@ export default function({
         addKey,
         updateKey,
     });
+    useChatScroll({
+        chatRef,
+        bottomRef,
+        loadMore: fetchNextPage,
+        shouldLoadMore: !isFetchingNextPage && !!hasNextPage,
+        count: data?.pages?.[0]?.items?.length ?? 0,
+    })
 
     if (status == "loading") {
         return (
@@ -66,7 +78,7 @@ export default function({
     }
 
     return (
-        <div className="flex-1 pt-4 flex flex-col py-4 mr-2 px-5 overflow-y-auto">
+        <div ref={chatRef} className="flex-1 pt-4 flex flex-col py-4 mr-2 px-5 overflow-y-auto">
             <div className="flex-1" />
             {!hasNextPage && (
                 <ChatWelcome name={name} />
@@ -74,18 +86,20 @@ export default function({
             <div className="flex flex-col-reverse mt-auto">
                 {data?.pages?.map((group: any, i: number) => (
                     <Fragment key={i}>
-                        {group.items.map((message: MessageWithMemberAndProfile) => (
+                        {group.items.map((message: MessageWithMemberAndProfile, i: number) => (
                             <ChatItem 
                                 message={message} 
                                 key={message.id} 
                                 socketUrl={socketUrl}
                                 socketQuery={socketQuery}
                                 currentMember={member}
+                                previousMessage={group.items[i + 1]}
                             />
                         ))}
                     </Fragment>
                 ))}
             </div>
+            <div ref={bottomRef} />
         </div>
     )
 }

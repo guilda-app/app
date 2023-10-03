@@ -26,7 +26,7 @@ function guildaMarkdown(content: string): string {
 export default function ({ content, embeds }: { content: string, embeds: MessageEmbed[] }) {
     return (
         <div>
-            <div dangerouslySetInnerHTML={
+            <div className="font-normal" dangerouslySetInnerHTML={
                 { __html: guildaMarkdown(escape(content)) }
             }></div>
             {embeds?.map((embed, i) => {

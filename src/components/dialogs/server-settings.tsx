@@ -16,6 +16,7 @@ import { useToast } from "../ui/use-toast";
 import { db } from "@/lib/db";
 import updateServerInfo from "@/lib/update-server-info";
 import { updateServerSettings } from "@/lib/servers";
+import uploadFile from "@/lib/upload-file";
 
 enum PageType {
     General,
@@ -29,6 +30,7 @@ export default function ServerSettingsDialog() {
     const isModalOpen = isOpen && modal == "serverSettings";
     const [serverCopy, setServerCopy] = React.useState<Server | null>(server);
     const [doNotExitAsClass, setdoNotExitAsClass] = React.useState(false);
+    const [serverImage, setServerImage] = React.useState("");
     const needsSaving = JSON.stringify(serverCopy) !== JSON.stringify(server);
     const { toast } = useToast();
 
@@ -63,6 +65,7 @@ export default function ServerSettingsDialog() {
 
     useEffect(() => {
         setServerCopy(server);
+        setServerImage(!server ? "" : server.imageUri);
     }, [server]);
 
     return server ? (
@@ -150,19 +153,32 @@ export default function ServerSettingsDialog() {
                                     <div className="flex items-center">
                                         <div className="mt-5 ml-8">
                                             <Avatar className="w-12 h-12">
-                                                <AvatarImage src={server.imageUri} />
+                                                <AvatarImage src={serverImage} />
                                             </Avatar>
                                         </div>
                                     </div>
                                     <div className="pt-4 ml-12 w-full">
                                         <div className="text-xs mb-2 font-normal select-none cursor-default w-max-12">
-                                            We recommend using a 52 x 52 image for best results.
+                                            We recommend using a 521 x 521 image for best results.
                                         </div>
                                         <Input
                                             name="picture"
                                             type="file"
                                             className="cursor-pointer w-3/4"
                                             accept="image/*"
+                                            onChange={async (e) => {
+                                                const file = e.target.files[0];
+                                                if (!file) return;
+
+                                                const upload = await uploadFile(file);
+                                                if (!upload) return;
+
+                                                setServerImage(upload);
+                                                setServerCopy((prevState: any) => {return {
+                                                    ...prevState,
+                                                    imageUri: upload
+                                                } as Server});
+                                            }}
                                         />
                                     </div>
                                 </div>

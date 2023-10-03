@@ -9,6 +9,7 @@ import { db } from "@/lib/db";
 import { updateProfileInfo } from "@/lib/update-server-info";
 import { connectProfile, disconnectProfile, updateProfileStatus } from "@/lib/profiles";
 import LordIcon from "../lord-icon";
+import AvatarWithStatus from "../avatar-with-status";
 
 export default function ({
     user
@@ -31,17 +32,15 @@ export default function ({
         <div>
             <Separator className="my-2" />
             <div className="anim-icon flex items-center rounded-sm hover:bg-muted transition-all duration-150 p-2 cursor-pointer">
-                <LordIcon target=".anim-icon" icon="hwuyodym" className="w-5 h-5 mr-2" />
-                <div className="ml-3">
+                <LordIcon target=".anim-icon" icon="hwuyodym" className="ml-[5px] mr-[10px] w-5 h-5" />
+                <div className="ml-2">
                     <span className="font-semibold text-sm text-muted-foreground">
                         Settings
                     </span>
                 </div>
             </div>
             <div className="flex items-center rounded-sm hover:bg-muted transition-all duration-150 p-2 cursor-pointer">
-                <Avatar className="w-5 h-5">
-                    <AvatarImage src={user.profile.imageUri} alt={user.profile.name} />
-                </Avatar>
+                <AvatarWithStatus src={user.profile.imageUri} status={user.profile.status} />
                 <div className="ml-3">
                     <span className="font-semibold text-sm text-muted-foreground capitalize"> 
                         {user.profile.name}

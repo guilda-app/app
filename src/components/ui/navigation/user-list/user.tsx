@@ -1,6 +1,5 @@
 import { ServerMember } from "@/lib/servers";
-import { Avatar } from "../../avatar";
-import { AvatarImage } from "@radix-ui/react-avatar";
+import { Avatar, AvatarImage } from "../../avatar";
 import { cn } from "@/lib/utils";
 import AvatarWithStatus from "../../avatar-with-status";
 import { ActionTooltip } from "../../action-tooltip";
