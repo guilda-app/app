@@ -34,7 +34,7 @@ export default function ({ content, embeds }: { content: string, embeds: Message
             }></div>
             {embeds?.map((embed, i) => {
                 return (
-                    <div key={i} className={cn(`border max-w-md overflow-hidden border-[${embeds}] rounded-lg mt-2`)}>
+                    <div key={i} className={cn(`border max-w-md overflow-hidden bg-zinc-950 border-[${embeds}] rounded-lg mt-2`)}>
                         <div className={cn(imageShouldBeThumbnail ? "flex items-start" : "")}>
                             <div className="flex flex-col flex-1 p-4">
                                 <a className="flex flex-row items-center" href={embed.url}>

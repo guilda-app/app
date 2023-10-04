@@ -58,11 +58,59 @@ export default function ({
         ((new Date(message.createdAt)).getTime() - (new Date(previousMessage.createdAt)).getTime() < 1000 * 60 * 5)
     );
 
+    const Dropy = (
+        <DropdownMenu onOpenChange={(open) => setIsDropdownOpen(open)}>
+            <DropdownMenuTrigger asChild>
+                <div className={cn("anim-icon right-3.5 bottom-full absolute",
+                    isDropdownOpen ? "flex" : "hidden group-hover:flex",
+                )} style={{
+                    transform: 'translateY(35%)',
+                }}>
+                    <ActionTooltip label="More actions" side="top">
+                        <div style={{
+                            width: '27px',
+                            height: '27px',
+                        }} className="flex items-center justify-center cursor-pointer rounded-sm mt-2 bg-zinc-900 border ml-2 text-zinc-200 group-hover:text-zinc-500 transition">
+                            <LordIcon target=".anim-icon" icon="rxufjlal" size={18} className="m-0" />
+                        </div>
+                    </ActionTooltip>
+                </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" style={{ transform: 'translateX(-40%)' }}>
+                {canEditMessage && (
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem>
+                            <Edit2 className="mr-2 h-4 w-4" />
+                            <span>Edit message</span>
+                        </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                )}
+                <DropdownMenuGroup>
+                    <DropdownMenuItem>
+                        <ClipboardCopy className="mr-2 h-4 w-4" />
+                        <span>Copy message ID</span>
+                    </DropdownMenuItem>
+                </DropdownMenuGroup>
+                {canDeleteMessage && (
+                    <>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuGroup>
+                            <DropdownMenuItem className="anim-icon text-red-600">
+                                <LordIcon target=".anim-icon" icon="kfzfxczd" className="mr-2" size={20} />
+                                <span>Delete message</span>
+                            </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                    </>
+                )}
+            </DropdownMenuContent>
+        </DropdownMenu>
+    );
+
     return (
-        <div className={cn("relative group flex items-start hover:bg-black/5 p-4 pb-0 transition w-full",
+        <div className={cn("relative group flex items-start hover:bg-black/5 py-4 px-2 pb-0 transition w-full",
             shouldConnectMessages ? "pt-0 pb-0" : "first-of-type:!mb-2 mt-2")}>
             {!shouldConnectMessages && (
-                <div className="group flex gap-x-2 items-start w-full">
+                <div className="relative group flex gap-x-2 items-start w-full py-1 px-2 hover:bg-zinc-950 rounded-md">
                     <div className="cursor-pointer hover:drop-shadow-md transition">
                         <Avatar>
                             <AvatarImage src={message.member.profile.imageUri} />
@@ -97,62 +145,21 @@ export default function ({
                             <MessageContent embeds={(message as any).embeds} content={message.content} />
                         </div>
                     </div>
+                    {Dropy}
                 </div>
             )}
             {shouldConnectMessages && (
-                <div className="group flex items-start w-full gap-x-2 group my-1">
+                <div className="relative group flex items-start w-full px-2 gap-x-2 group py-1 hover:bg-zinc-950 rounded-md">
                     <span className="opacity-0 group-hover:opacity-100 font-bold text-xs text-zinc-400 mt-1 ml-1 mr-[5px]">
                         {format(new Date(message.createdAt), TIMESTAMP_SMALL)}
                     </span>
                     <div className={cn("text-sm text-zinc-300",
-                        message.deleted && "italic && text-zinc-400 text-xs mt-1")}>
+                        message.deleted && "italic text-zinc-400 text-xs mt-1")}>
                         <MessageContent embeds={(message as any).embeds} content={message.content} />
                     </div>
+                    {Dropy}
                 </div>
             )}
-            <DropdownMenu onOpenChange={(open) => setIsDropdownOpen(open)}>
-                <DropdownMenuTrigger asChild>
-                    <div className={cn("anim-icon",
-                        isDropdownOpen ? "flex" : "hidden group-hover:flex absolute top-0 right-0",
-                    )}>
-                        <ActionTooltip label="More actions" side="top">
-                            <div style={{
-                                width: '27px',
-                                height: '27px',
-                            }} className="flex items-center justify-center cursor-pointer rounded-sm mt-2 bg-zinc-900 border ml-2 text-zinc-200 group-hover:text-zinc-500 transition">
-                                <LordIcon target=".anim-icon" icon="rxufjlal" size={18} className="m-0" />
-                            </div>
-                        </ActionTooltip>
-                    </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" style={{ transform: 'translateX(-40%)' }}>
-                    {canEditMessage && (
-                        <DropdownMenuGroup>
-                            <DropdownMenuItem>
-                                <Edit2 className="mr-2 h-4 w-4" />
-                                <span>Edit message</span>
-                            </DropdownMenuItem>
-                        </DropdownMenuGroup>
-                    )}
-                    <DropdownMenuGroup>
-                        <DropdownMenuItem>
-                            <ClipboardCopy className="mr-2 h-4 w-4" />
-                            <span>Copy message ID</span>
-                        </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                    {canDeleteMessage && (
-                        <>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuGroup>
-                                <DropdownMenuItem className="anim-icon text-red-600">
-                                    <LordIcon target=".anim-icon" icon="kfzfxczd" className="mr-2" size={20} />
-                                    <span>Delete message</span>
-                                </DropdownMenuItem>
-                            </DropdownMenuGroup>
-                        </>
-                    )}
-                </DropdownMenuContent>
-            </DropdownMenu>
         </div>
     );
 }

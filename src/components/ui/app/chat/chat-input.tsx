@@ -56,7 +56,7 @@ export default function({ apiUrl, query, name }: {
                     render={({ field }) => (
                         <FormItem>
                             <FormControl>
-                                <div className="relative mx-14 my-6 mt-1 bg-zinc-950 border p-1 px-2 rounded-lg">
+                                <div className="relative mx-12 my-6 mt-1 bg-zinc-950 border p-1 px-2 rounded-lg">
                                     <Input
                                         disabled={isLoading}
                                         className="focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-200 border-0 pb-0 mt-1 bg-transparent"

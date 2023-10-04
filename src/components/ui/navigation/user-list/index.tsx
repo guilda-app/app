@@ -59,7 +59,7 @@ export default function ServerUserList({
     }
 
     return isMounted ? (
-        <div className="flex flex-col p-5 w-[300px] z-0 pl-7 select-none pt-6 border-l bg-zinc-950">
+        <div className="flex flex-col p-5 w-[335px] z-0 pl-7 select-none pt-6 border-l bg-zinc-950">
             <div className="flex flex-col mt-2">
                 <div className="flex items-center">
                     <Avatar className="mr-5">

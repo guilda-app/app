@@ -1,5 +1,5 @@
 "use client";
-import { useCurrentUser } from "@/lib/authHooks";
+import { useCurrentUser, useUserServer } from "@/lib/authHooks";
 import { getChannelFromId, getServerMember } from "@/lib/servers";
 import { Channel, Member } from "@prisma/client";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -48,7 +48,7 @@ export default function ({
     return isMounted ? (
         <div className="w-full h-full relative flex">
             <div className="h-full flex flex-col flex-1">
-                <ChannelHeader channel={channel} />
+                <ChannelHeader serverId={serverId} channel={channel} />
                 <Messages 
                     member={member as Member}
                     name={channel?.name as string}

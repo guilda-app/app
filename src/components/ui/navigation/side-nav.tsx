@@ -69,7 +69,7 @@ export default function ({ user }: { user: FullUser }) {
     }, [selectedServer]);
 
     return loadedList ? (
-        <div className="p-5 flex flex-col space-between relative border-r w-[300px] bg-zinc-950 shadow-inner h-full justify-between">
+        <div className="p-5 flex flex-col space-between relative border-r w-[335px] bg-zinc-950 shadow-inner h-full justify-between">
             <div>
                 <Popover open={serverListOpen} onOpenChange={setServerListOpen}>
                     <PopoverTrigger className="w-full">

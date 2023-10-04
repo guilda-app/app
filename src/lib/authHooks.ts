@@ -96,7 +96,7 @@ export function useUserServerList(user: FullUser | null) {
     return { list, refresh, loadedList };
 }
 
-export function useUserServer(serverId: string) {
+export function useUserServer(serverId: string, extraArgs: any = {}) {
     const [server, setServer] = useState<Server | null>(null);
 
     const { socket } = useSocket();
@@ -111,7 +111,7 @@ export function useUserServer(serverId: string) {
 
     useEffect(() => {
         async function fetchServer() {
-            let server = await getServerFromId(serverId);
+            let server = await getServerFromId(serverId, extraArgs);
             if (!server) return;
             setServer(server);
         }
