@@ -27,4 +27,14 @@ export type NextApiResponseServerIO = NextApiResponse & {
     };
 }
 
+export enum BadgeType {
+    Newbee = "newbee",
+}
+
+export interface Badge {
+    type: BadgeType;
+    description: string;
+    image: string;
+}
+
 export type { User, Profile };

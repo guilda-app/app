@@ -13,7 +13,7 @@ export default function NavigationUser({ user }: {
     const roleName = getRoleName(user.role);
     return (
         <UserCard profile={user.profile}>
-            <div className={cn("mb-1 select-none relative flex items-center overflow-hidden text-muted-foreground cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 px-3 py-2 my-1", user.profile.status == "offline" ? "opacity-60" : "")}>
+            <div className={cn("mb-1 select-none relative flex items-center overflow-hidden text-muted-foreground cursor-pointer transition-all duration-150 rounded-sm hover:bg-zinc-900 p-2 pr-3 my-1", user.profile.status == "offline" ? "opacity-60" : "")}>
                 <AvatarWithStatus src={user.profile.imageUri} status={user.profile.status} />
                 <div className="ml-3 flex flex-col">
                     <span className="font-semibold text-sm text-white capitalize"> 

@@ -31,13 +31,14 @@ model Profile {
 
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   
-  status        String   @default("offline") // online, offline, idle, dnd
-  statusMessage String?
+  status           String   @default("offline") // online, offline, idle, dnd
+  statusMessage    String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   connectedSockets Int @default(0)
+  badges           String   @default("") // comma separated list of badges
 
   @@index([userId])
 }

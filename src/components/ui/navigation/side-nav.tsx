@@ -85,7 +85,7 @@ export default function ({ user }: { user: FullUser }) {
                             <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="flex flex-col items-center w-full absolute relative p-1 mt-1 w-[260px]">
+                    <PopoverContent className="flex flex-col items-center w-full absolute relative p-1 mt-1 w-[280px]">
                         <div className="flex items-center w-full border-b mb-3">
                             <Label htmlFor="search-servers">
                                 <SearchIcon className="h-4 w-4 mx-4 opacity-50" />

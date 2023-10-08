@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { Profile } from "@prisma/client";
 import { Server } from "@/lib/types"
 import { FULL_SERVER_INCLUDES } from "./constants";
+import { BadgeType } from "./types";
 
 export async function getVerificationCode(email: string, forCreation: boolean) {
   const code = await db.verificationCode.create({
@@ -32,7 +33,8 @@ export async function createProfile({
     data: {
       name,
       userId: user.id,
-      imageUri: "https://i.imgur.com/6VBx3io.png"
+      imageUri: "https://i.imgur.com/6VBx3io.png",
+      badges: BadgeType.Newbee,
     },
   });
 
