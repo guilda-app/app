@@ -16,6 +16,8 @@ import axios from "axios";
 import { Separator } from "../../separator";
 import { ActionTooltip } from "../../action-tooltip";
 import { cn } from "@/lib/utils";
+import uploadFile from "@/lib/upload-file";
+import { useState } from "react";
 
 const formSchema = z.object({
     content: z.string().min(1),
@@ -26,6 +28,7 @@ export default function({ apiUrl, query, name }: {
     query: Record<string, string>;
     name: string;
 }) {
+    const [attachments, setAttachments] = useState<string[]>([]);
     const form = useForm<z.infer<typeof formSchema>>({
         defaultValues: {
             content: "",
@@ -41,7 +44,8 @@ export default function({ apiUrl, query, name }: {
                 query,
             });
             form.reset();
-            await axios.post(url, values);
+            setAttachments([]);
+            await axios.post(url, {...values, attachments});
         } catch (e) {
             console.error(e);
         }
@@ -64,24 +68,50 @@ export default function({ apiUrl, query, name }: {
                                         autoComplete="off"
                                         {...field}
                                     />
-                                    <div className="flex mt-1 py-1 w-full items-center justify-end text-muted-foreground">
-                                        <ActionTooltip label="Send voice message" side="top">
-                                            <MicIcon className="w-4 h-4 cursor-pointer" />
-                                        </ActionTooltip>
-                                        <ActionTooltip label="Insert attachment" side="top">
-                                            <PaperclipIcon className="w-4 h-4 cursor-pointer ml-3" />
-                                        </ActionTooltip>
-                                        <Separator className="h-6 w-[1px] mx-3 my-0" />
-                                        <ActionTooltip label="Mention someone in the server" side="top">
-                                            <AtSignIcon className="w-4 h-4 cursor-pointer" />
-                                        </ActionTooltip>
-                                        <ActionTooltip label="Insert an emoji" side="top">
-                                            <SmilePlus className="w-4 h-4 cursor-pointer ml-3" />
-                                        </ActionTooltip>
-                                        <ActionTooltip label="Send message" side="top">
-                                            <SendIcon onClick={form.handleSubmit(onSubmit)} className={cn("w-4 h-4 cursor-pointer mx-3", !form.getFieldState("content").isDirty ? "cursor-not-allowed" : "")} />
-                                        </ActionTooltip>  
+                                    <div className="flex">
+                                        <div>
+                                            {/* TODO: support other types of attachments, not just images! */}
+                                            {attachments.map((attachment) => (
+                                                <img key={attachment} className="max-w-md max-h-md rounded-lg mt-1" src={attachment} />
+                                            ))}
+                                        </div>
+                                        <div className="flex mt-1 py-1 w-full items-center justify-end text-muted-foreground">
+                                            <ActionTooltip label="Send voice message" side="top">
+                                                <MicIcon className="w-4 h-4 cursor-pointer" />
+                                            </ActionTooltip>
+                                            <ActionTooltip label="Insert attachment" side="top">
+                                                <span>
+                                                    <input 
+                                                        onChange={async (e) => {
+                                                            const files = e.target.files;
+                                                            
+                                                            for (let i = 0; i < files.length; i++) {
+                                                                const file = files[i];
+                                                                const upload = await uploadFile(file);
+                                                                if (!upload) continue;
+            
+                                                                setAttachments((attachments) => [...attachments, upload]);
+                                                            }
+                                                        }}
+                                                        className="hidden" type="file" id="chat-input-image" name="myImage" multiple="multiple" accept="image/png, image/gif, image/jpeg" />
+                                                    <label htmlFor="chat-input-image">
+                                                        <PaperclipIcon className="w-4 h-4 cursor-pointer ml-3" />
+                                                    </label>
+                                                </span>
+                                            </ActionTooltip>
+                                            <Separator className="h-6 w-[1px] mx-3 my-0" />
+                                            <ActionTooltip label="Mention someone in the server" side="top">
+                                                <AtSignIcon className="w-4 h-4 cursor-pointer" />
+                                            </ActionTooltip>
+                                            <ActionTooltip label="Insert an emoji" side="top">
+                                                <SmilePlus className="w-4 h-4 cursor-pointer ml-3" />
+                                            </ActionTooltip>
+                                            <ActionTooltip label="Send message" side="top">
+                                                <SendIcon onClick={form.handleSubmit(onSubmit)} className={cn("w-4 h-4 cursor-pointer mx-3", !form.getFieldState("content").isDirty ? "cursor-not-allowed" : "")} />
+                                            </ActionTooltip>  
+                                        </div>
                                     </div>
+
                                 </div>
                             </FormControl>
                         </FormItem>

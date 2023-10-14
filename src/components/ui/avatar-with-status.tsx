@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarImage } from "./avatar";
 import { MinusCircle, MoonIcon } from "lucide-react";
+import { ActionTooltip } from "./action-tooltip";
 
 const statusIcons = {
     online: <div className="w-full h-full bg-green-500"></div>,
@@ -26,13 +27,14 @@ export default function ({
     allowOffline?: boolean
 }) {
     const offset = dotSize == "small" ? `-2px` : `0px`;
+    const hidden = !allowOffline && status == "offline";
     return (
         <div className="relative">
-            <div style={{ bottom: offset, right: offset }} className={cn("z-10 relative rounded-full absolute border-zinc-900 overflow-hidden ", dotClassName, dotSize == "small" ? "w-3 h-3 border-2" : "w-6 h-6 border-[4px]")}>
-                {!allowOffline && status == "offline" ? null : (
-                    <>
+            <div style={{ bottom: offset, right: offset }} className={cn("z-10 relative rounded-full absolute overflow-hidden ", !hidden ? "border-zinc-900" : "!border-0", dotClassName, dotSize == "small" ? "w-3 h-3 border-2" : "w-6 h-6 border-[4px]")}>
+                {hidden ? null : (
+                    <ActionTooltip label={status} side="top">
                         {statusIcons[status] || null}
-                    </>
+                    </ActionTooltip>
                 )}
             </div>
             <Avatar className={`w-8 h-8 relative ${className}`} {...props}>

@@ -5,18 +5,19 @@ import getCurrentProfilePages from "@/lib/get-current-profile.pages";
 import { getChannelFromServer, getServerFromIdWithVerification } from "@/lib/servers";
 import { db } from "@/lib/db";
 import getEmbeds from "@/lib/get-embeds";
+import { Attachment } from "@prisma/client";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponseServerIO) {
     if (req.method != 'POST') return res.status(405).end();
 
     try {
         const user = await getCurrentProfilePages(req, true);
-        const { content, fileUrl } = req.body;
+        const { content, attachments } = req.body;
         const { serverId, channelId } = req.query;
 
         if (!user) return res.status(401).end();
         if (!serverId || !channelId) return res.status(400).end();
-        if (!content && !fileUrl) return res.status(400).end();
+        if (!content && !attachments) return res.status(400).end();
 
         const server = await getServerFromIdWithVerification(serverId as string, user.profile.id);
         if (!server) return res.status(403).end();
@@ -28,11 +29,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
         if (!member) return res.status(403).end();
 
         let embeds = await getEmbeds(content);
+        let messageAttachments: {url:string}[] = [];
+        for (let i = 0; i < attachments.length; i++) {
+            const url = attachments[i];
+            messageAttachments.push({url});
+        }
 
         const message = await db.message.create({
             data: {
                 content,
-                fileUrl,
+                attachments: {
+                    create: messageAttachments
+                },
                 memberId: member.id,
                 channelId: channel.id,
                 embeds: {
@@ -45,7 +53,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
                         profile: true
                     }
                 },
-                embeds: true
+                embeds: true,
+                attachments: true
             }
         });
 

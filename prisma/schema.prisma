@@ -126,7 +126,8 @@ model Message {
   id String @id @default(uuid())
   content String 
 
-  fileUrl String?
+  attachments Attachment[]
+
   memberId String
   member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
 
@@ -142,6 +143,13 @@ model Message {
 
   @@index([memberId])
   @@index([channelId])
+}
+
+model Attachment {
+  id String @id @default(uuid())
+  url String
+
+  message Message @relation(fields: [id], references: [id], onDelete: Cascade)
 }
 
 model MessageEmbed {

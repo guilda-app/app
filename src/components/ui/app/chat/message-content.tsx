@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { MessageEmbed } from "@prisma/client";
+import { Message, MessageEmbed } from "@prisma/client";
 import { useState } from "react";
 
 function escape(unsafe: string): string {
@@ -24,8 +24,9 @@ function guildaMarkdown(content: string): string {
     return content;
 }
 
-export default function ({ content, embeds }: { content: string, embeds: MessageEmbed[] }) {
+export default function ({ message, embeds }: { message: Message, embeds: MessageEmbed[] }) {
     const [imageShouldBeThumbnail, setImageShouldBeThumbnail] = useState(false);
+    const {content, attachments} = message;
 
     return (
         <div>
@@ -61,6 +62,13 @@ export default function ({ content, embeds }: { content: string, embeds: Message
                                 </div>
                             )}
                         </div>
+                    </div>
+                )
+            })}
+            {attachments?.map((attachment, i) => {
+                return (
+                    <div key={i} className="flex relative flex-row overflow-hidden w-fit mt-2 rounded-md items-center">
+                        <img src={attachment.url} className="max-w-md max-h-md ml-2" />
                     </div>
                 )
             })}

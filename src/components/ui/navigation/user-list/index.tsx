@@ -1,5 +1,5 @@
 import { ServerMember, getServerFromId, getServerMember, getServerMembers } from "@/lib/servers";
-import { Member, Server } from "@prisma/client";
+import { Member, Profile, Server } from "@prisma/client";
 import { useEffect, useState } from "react";
 import Section from "../section";
 import NavigationUser from "./user";
@@ -28,14 +28,13 @@ export default function ServerUserList({
             setIsMounted(true);
 
             socket.on(SERVER_MEMBERS_UPDATE(serverId), async (_: Server) => {
-                console.log("server update")
                 let members = await getServerMembers(serverId);
                 if (!members) return;
                 setServerMembers(members);
             });
 
             for (let member of members) {
-                socket.on(PROFILE_UPDATE(member.profile.id), async (profile: Member) => {
+                socket.on(PROFILE_UPDATE(member.profile.id), async (profile: Profile) => {
                     let member = await getServerMember(serverId, profile.id) as ServerMember;
                     if (!member) return;
                     setServerMembers((members) => {

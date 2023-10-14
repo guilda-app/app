@@ -13,7 +13,6 @@ export default async function(file: File) {
             }
         });
         let { fileName } = response.data;
-        console.log(fileName);
         return `/api/upload/${fileName}`;
     } catch (e) {
         console.error(e);

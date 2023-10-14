@@ -10,6 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import MessageContent from "./message-content";
 import { getRoleName } from "@/lib/roles";
 import LordIcon from "../../lord-icon";
+import UserCard from "../../user-card";
 
 export type MessageWithMemberAndProfile = Message & {
     member: Member & {
@@ -112,16 +113,20 @@ export default function ({
             {!shouldConnectMessages && (
                 <div className="relative group flex gap-x-2 items-start w-full py-1 px-2 hover:bg-zinc-950 rounded-md">
                     <div className="cursor-pointer hover:drop-shadow-md transition">
-                        <Avatar>
-                            <AvatarImage src={message.member.profile.imageUri} />
-                        </Avatar>
+                        <UserCard side="right" profile={message.member.profile}>
+                            <Avatar>
+                                <AvatarImage src={message.member.profile.imageUri} />
+                            </Avatar>
+                        </UserCard>
                     </div>
                     <div className="flex flex-col w-full">
                         <div className="flex items-center gap-x-2">
                             <div className="flex items-center">
-                                <p className="font-semibold test-sm hover:underline cursor-pointer">
-                                    {message.member.profile.name}
-                                </p>
+                                <UserCard side="right" profile={message.member.profile}>
+                                    <p className="font-semibold test-sm hover:underline cursor-pointer">
+                                        {message.member.profile.name}
+                                    </p>
+                                </UserCard>
                                 <ActionTooltip label={roleName} side="right">
                                     {roleIcons[roleName.toLocaleLowerCase() as keyof typeof roleIcons]}
                                 </ActionTooltip> 
@@ -142,7 +147,7 @@ export default function ({
                         </div>
                         <div className={cn("text-sm text-zinc-300",
                             message.deleted && "italic && text-zinc-400 text-xs mt-1")}>
-                            <MessageContent embeds={(message as any).embeds} content={message.content} />
+                            <MessageContent embeds={(message as any).embeds} message={message} />
                         </div>
                     </div>
                     {Dropy}
@@ -155,7 +160,7 @@ export default function ({
                     </span>
                     <div className={cn("text-sm text-zinc-300",
                         message.deleted && "italic text-zinc-400 text-xs mt-1")}>
-                        <MessageContent embeds={(message as any).embeds} content={message.content} />
+                        <MessageContent embeds={(message as any).embeds} message={message} />
                     </div>
                     {Dropy}
                 </div>
