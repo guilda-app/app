@@ -11,6 +11,7 @@ import MessageContent from "./message-content";
 import { getRoleName } from "@/lib/roles";
 import LordIcon from "../../lord-icon";
 import UserCard from "../../user-card";
+import { useModal } from "../../../../../hooks/use-modal-store";
 
 export type MessageWithMemberAndProfile = Message & {
     member: Member & {
@@ -44,7 +45,8 @@ export default function ({
     const [isEditing, setIsEditing] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
+    const { onOpen } = useModal();
+    
     let roleName: string = getRoleName(currentMember.role);
 
     const hasBeenUpdated = message.createdAt !== message.updatedAt;
@@ -58,6 +60,12 @@ export default function ({
         previousMessage.memberId === message.memberId &&
         ((new Date(message.createdAt)).getTime() - (new Date(previousMessage.createdAt)).getTime() < 1000 * 60 * 5)
     );
+
+    const deleteMessage = () => {
+        onOpen("deleteMessage", {
+            message
+        });
+    }
 
     const Dropy = (
         <DropdownMenu onOpenChange={(open) => setIsDropdownOpen(open)}>
@@ -96,7 +104,7 @@ export default function ({
                     <>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuItem className="anim-icon text-red-600">
+                            <DropdownMenuItem className="anim-icon text-red-600" onClick={deleteMessage}>
                                 <LordIcon target=".anim-icon" icon="kfzfxczd" className="mr-2" size={20} />
                                 <span>Delete message</span>
                             </DropdownMenuItem>

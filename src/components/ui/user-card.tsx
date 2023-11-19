@@ -18,7 +18,7 @@ export default function UserCard({
     const [badges, setBadges] = React.useState<Badge[] | null>([]);
     useEffect(() => {
         getBadgesFromUser(profile).then(setBadges);
-    });
+    }, []);
     return (
         <Popover>
             <PopoverTrigger asChild>

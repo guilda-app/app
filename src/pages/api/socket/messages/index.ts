@@ -8,7 +8,7 @@ import getEmbeds from "@/lib/get-embeds";
 import { Attachment } from "@prisma/client";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponseServerIO) {
-    if (req.method != 'POST') return res.status(405).end();
+    if (req.method != 'POST' && req.method != 'DELETE') return res.status(405).end();
 
     try {
         const user = await getCurrentProfilePages(req, true);
