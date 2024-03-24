@@ -5,6 +5,7 @@ import { Profile } from "@prisma/client";
 import { Server } from "@/lib/types"
 import { FULL_SERVER_INCLUDES } from "./constants";
 import { BadgeType } from "./types";
+import { stringify } from "querystring";
 
 export async function getVerificationCode(email: string, forCreation: boolean) {
   const code = await db.verificationCode.create({
@@ -28,12 +29,12 @@ export async function createProfile({
       email,
     },
   });
-
+  const urlEncodedName = encodeURIComponent(name);
   const profile = await db.profile.create({
     data: {
       name,
       userId: user.id,
-      imageUri: "https://i.imgur.com/6VBx3io.png",
+      imageUri: `https://source.boringavatars.com/beam/120/${urlEncodedName}?colors=4C3D31,F18273,F2BD76,F4F5DE,C4CEB0&square`,
       badges: BadgeType.Newbee,
     },
   });
@@ -123,8 +124,8 @@ export async function disconnectProfile(profile: Profile) {
       id: profile.id
     },
     data: {
-      status: profile.connectedSockets > 1 ? profile.status : "offline",
-      connectedSockets: profile.connectedSockets <= 1 ? 0 : profile.connectedSockets - 1
+      status: profile.connectedSockets > 0 ? profile.status : "offline",
+      connectedSockets: profile.connectedSockets < 1 ? 0 : profile.connectedSockets - 1
     }
   });
 }

@@ -8,8 +8,8 @@ import DeleteMessageDialog from "../dialogs/delete-message";
 export const ModalProvider = () => {
     return (
         <>
-            <CreateServerDialog />
             <CreateChannelDialog />
+            <CreateServerDialog />
             <ServerSettingsDialog />
             <DeleteMessageDialog />
         </>

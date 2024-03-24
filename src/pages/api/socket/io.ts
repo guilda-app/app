@@ -15,7 +15,6 @@ export const config = {
 }
 
 const ioHandler = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
-
     if (!res.socket.server.io) {
         const path = '/api/socket/io';
         const httpServer = res.socket.server as any;

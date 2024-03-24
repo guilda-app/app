@@ -1,24 +1,16 @@
 import {
     AlertDialog,
-    AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Form, FormControl, FormField, FormMessage } from "@/components/ui/form"
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { Label } from "@/components/ui/label";
+} from "@/components/ui/alert-dialog";
+import qs from "query-string";
+import axios from "axios";
 import React from "react";
-import { Input } from "@/components/ui/input";
-import { createNewServer } from "@/lib/servers";
 import { useModal } from "../../../hooks/use-modal-store";
-import { X } from "lucide-react";
 import { Icons } from "../icons";
 import LordIcon from "../ui/lord-icon";
 import { Button } from "../ui/button";
@@ -31,7 +23,15 @@ export default function DeleteMessageDialog() {
     
     const onSubmit = async () => {
         setIsLoading(true);
-        throw new Error("Not implemented");
+        try {
+            const url = qs.stringifyUrl({
+                url: "/api/socket/messages",
+            });
+            await axios.delete(url, { data: { message } });
+        } catch (e) {
+            console.error(e);
+        }
+        handleClose(false);
         setIsLoading(false);
     }
 

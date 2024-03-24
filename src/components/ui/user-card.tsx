@@ -26,7 +26,7 @@ export default function UserCard({
             </PopoverTrigger>
             <PopoverContent className="p-0 overflow-hidden rounded-lg border" align="start" side={side}>
                 <div className="flex flex-col w-72">
-                    <div className="w-full h-24 bg-zinc-900 border-b shadow">
+                    <div className="w-full h-20 bg-gradient-to-r from-violet-200 to-pink-200 border-b shadow">
 
                     </div>
                     <div className="relative px-7">
